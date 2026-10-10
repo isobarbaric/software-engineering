@@ -1,18 +1,24 @@
 {
   "name": "@isobarbaric/code-contracts",
   "version": "0.1.0",
-  "description": "Deterministic code contracts for React and Software Factory frontends.",
+  "description": "Deterministic code contracts for TypeScript and Python repositories.",
   "type": "module",
   "main": "./src/index.js",
+  "bin": {
+    "code-contracts": "./bin/code-contracts.js"
+  },
   "exports": {
     ".": "./src/index.js"
   },
   "files": [
+    "bin",
     "src",
+    "python",
     "README.md"
   ],
   "scripts": {
-    "lint": "eslint src tests",
+    "check": "node bin/code-contracts.js check",
+    "lint": "eslint bin src tests && python3 -m compileall -q python",
     "test": "node --test"
   },
   "peerDependencies": {

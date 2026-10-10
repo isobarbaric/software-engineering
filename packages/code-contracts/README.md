@@ -23,6 +23,33 @@ the `sf-platform` architecture.
 Rules are exposed under the `contracts` ESLint namespace, for example
 `contracts/dedicated-props-interface`.
 
+Run the local CLI against another checkout without installing or publishing the
+package:
+
+```sh
+pnpm contracts:check \
+  --repo /path/to/sf-platform \
+  --changed-since origin/main \
+  --profile software-factory
+```
+
+`--changed-since` checks committed branch changes plus staged, unstaged, and
+untracked files since the merge base. `--staged` reads the exact blobs in Git's
+index, so a partially staged file is checked as it will be committed. `--all`
+checks every tracked or untracked TypeScript and Python source file. Exactly one
+scope is required. The CLI loads ESLint and Python AST contracts directly from
+this checkout; it does not modify the target repository or require a published
+package.
+
+Python contracts use Python's own AST rather than pretending backend contracts
+are ESLint rules. The lower-level Python entrypoint remains available for a
+file or directory:
+
+```sh
+PYTHONPATH=packages/code-contracts/python \
+  python3 -m code_contracts backend/software_factory
+```
+
 ## General rules
 
 | Rule | Deterministic contract |

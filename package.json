@@ -4,6 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@9.15.0",
   "scripts": {
+    "contracts:check": "node packages/code-contracts/bin/code-contracts.js check",
     "lint": "pnpm --filter @isobarbaric/code-contracts lint",
     "test": "pnpm --filter @isobarbaric/code-contracts test"
   }
