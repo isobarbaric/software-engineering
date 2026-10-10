@@ -9,9 +9,13 @@
 - Treat bounded helper skills as one common pool. `engineer` and `implement`
   select applicable helpers without creating fixed role-owned branches;
   `execute` does not select helpers directly.
+- Use `$name-software-concepts` when introducing or renaming shared concepts,
+  public identifiers, packages, rules, schemas, or cross-surface vocabulary.
+  Keep mechanical local names governed by mature repository convention.
 - Keep `verify-implementation` as the implementer self-gate in the normal
   workflow, not as an independent approval role.
-- Keep helper names capability-based. Use `write-code-comments` for the
+- Keep helper names capability-based. Use `$name-software-concepts` to litigate
+  helper semantics and trigger clarity, and `write-code-comments` for the
   personal code-commenting conventions.
 - Do not add a fixed workflow state machine without a demonstrated persistence,
   recovery, or concurrency requirement.

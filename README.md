@@ -39,6 +39,7 @@ return to the engineer as decision deltas.
 | `build-frontend` | Supply React and TypeScript rules for ownership, state, effects, caches, routing, composition, and interaction. |
 | `build-backend` | Supply backend rules for service boundaries, persistence, authorization, background work, and external effects. |
 | `build-migrations` | Supply schema-evolution, migration-review, rollout, compatibility, and forward-recovery rules. |
+| `name-software-concepts` | Choose or review names whose semantics, ownership, lifecycle, or discovery behavior carry engineering meaning. |
 | `verify-implementation` | Prove completed work against the plan, domain contracts, and actual failure boundaries. |
 | `write-code-comments` | Write or revise only comments and docstrings that preserve non-obvious reasons, constraints, or invariants. |
 
@@ -47,6 +48,11 @@ procedures inside a role's assignment and never orchestrate the overall task.
 `engineer` and `implement` select from the pool as needed while staying within
 their own responsibility. In the normal workflow, verification remains the
 implementer's self-gate rather than an independent approval role.
+
+Both roles use `name-software-concepts` for consequential vocabulary. The
+engineer uses it to make plan terminology and public contracts unambiguous; the
+implementer uses it for plan-compatible names and to identify naming collisions
+that must return to engineering as decision deltas.
 
 ## Design constraints
 
