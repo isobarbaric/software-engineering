@@ -8,6 +8,8 @@
   code, and `implement` does not silently revise material plan decisions.
 - Treat `build-frontend`, `build-backend`, and `build-migrations` as shared
   domain helpers. Keep `verify-implementation` as the implementer self-gate.
+- Keep helper names capability-based. Use `write-code-comments` for the
+  personal code-commenting conventions.
 - Do not add a fixed workflow state machine without a demonstrated persistence,
   recovery, or concurrency requirement.
 - Use only skills surfaced in Codex's available-skills catalog. Report any
@@ -17,4 +19,3 @@
   check every relative Markdown link before publishing.
 - Preserve published branch history. Add commits; do not amend, rebase, or
   force-push unless the user explicitly requests history rewriting.
-

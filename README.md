@@ -33,6 +33,7 @@ discoveries return to the engineer as decision deltas.
 | `build-backend` | Supply backend rules for service boundaries, persistence, authorization, background work, and external effects. |
 | `build-migrations` | Supply schema-evolution, migration-review, rollout, compatibility, and forward-recovery rules. |
 | `verify-implementation` | Prove the completed work against the plan, domain contracts, and actual failure boundaries. |
+| `write-code-comments` | Write or revise only comments and docstrings that preserve non-obvious reasons, constraints, or invariants. |
 
 The `build-*` skills are shared domain truth: both `engineer` and `implement`
 may use them. `verify-implementation` is an implementer self-gate, not an
@@ -70,4 +71,3 @@ Restart or reload Codex if its skill catalog does not refresh automatically.
 Each directory under `skills/` is independently installable. A skill keeps its
 entrypoint in `SKILL.md`, focused guidance in `references/`, and UI metadata in
 `agents/openai.yaml`.
-

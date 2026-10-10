@@ -23,7 +23,7 @@ conflict with skill isolation or higher-priority instructions.
 
 - Use `naming-litigation` when introducing or changing identifiers or domain
   vocabulary.
-- Use `krish-commenting` when adding or revising comments or docstrings.
+- Use `write-code-comments` when adding or revising comments or docstrings.
 - Use `$verify-implementation` for the implementation self-gate.
 - Use `branch-from-main` only when the user asks for branch creation or its
   naming output.

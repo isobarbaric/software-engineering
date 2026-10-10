@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Code Comments"
+  short_description: "Write concise, useful code comments"
+  default_prompt: "Use $write-code-comments to write or review comments in Krish’s concise code-commenting style."
