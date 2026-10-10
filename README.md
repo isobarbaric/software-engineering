@@ -4,40 +4,66 @@
 high-level blueprint into an implementation-grade plan, executes that plan,
 and verifies the result without collapsing planning and coding into one role.
 
-## Hierarchy
+## Skill layers
 
 ```text
-execute
-├── engineer
-│   └── applicable helper skills
-└── implement
-    └── applicable helper skills
+Layer 1: orchestration entrypoint
+  execute
+    └── invokes the role the work currently needs
+
+Layer 2: high-level role skills
+  engineer        implement
+      └── select applicable helpers ──┘
+
+Layer 3: bounded helper skills
+  build-frontend    build-backend    build-migrations
+  verify-implementation             write-code-comments
 ```
 
-`execute` is the single orchestration entrypoint. It calls only the two role
-skills. `engineer` owns the implementation contract; `implement` owns code and
-evidence. Those roles select helper skills according to the changed concerns.
+The layers describe responsibility, not a fixed sequence. `execute` never does
+engineering, coding, or helper work itself. It invokes only `engineer` and
+`implement`, which select the applicable helpers for the work they own.
 
 There is deliberately no separate QA role and no fixed workflow state
 machine. Verification is an implementer responsibility, while material
 discoveries return to the engineer as decision deltas.
 
-## Skills
+### 1. Orchestration entrypoint
 
 | Skill | Responsibility |
 | --- | --- |
 | `execute` | Frame a blueprint, preserve the working artifacts, and route work between the two roles. |
+
+Use `execute` when starting with a blueprint and asking kstack to carry it
+through planning, implementation, and evidence-based completion. It is the one
+top-level entrypoint for the complete workflow.
+
+### 2. High-level role skills
+
+| Skill | Responsibility |
+| --- | --- |
 | `engineer` | Investigate the repository and produce or revise a portable, code-level implementation contract. |
 | `implement` | Execute an approved plan, preserve its decisions, and return material deltas instead of silently redesigning. |
-| `build-frontend` | Supply React and TypeScript rules for ownership, state, effects, caches, routing, composition, and interaction. |
-| `build-backend` | Supply backend rules for service boundaries, persistence, authorization, background work, and external effects. |
-| `build-migrations` | Supply schema-evolution, migration-review, rollout, compatibility, and forward-recovery rules. |
-| `verify-implementation` | Prove the completed work against the plan, domain contracts, and actual failure boundaries. |
-| `write-code-comments` | Write or revise only comments and docstrings that preserve non-obvious reasons, constraints, or invariants. |
 
-The `build-*` skills are shared domain truth: both `engineer` and `implement`
-may use them. `verify-implementation` is an implementer self-gate, not an
-independent approval role.
+These roles have disjoint ownership. `engineer` owns the plan and does not edit
+product code. `implement` owns the code and does not silently revise material
+plan decisions. Either role can be invoked directly when the user is already
+at that layer of the workflow.
+
+### 3. Helper skills
+
+| Skill | Used by | Responsibility |
+| --- | --- | --- |
+| `build-frontend` | `engineer`, `implement` | Supply React and TypeScript rules for ownership, state, effects, caches, routing, composition, and interaction. |
+| `build-backend` | `engineer`, `implement` | Supply backend rules for service boundaries, persistence, authorization, background work, and external effects. |
+| `build-migrations` | `engineer`, `implement` | Supply schema-evolution, migration-review, rollout, compatibility, and forward-recovery rules. |
+| `verify-implementation` | `implement` | Prove completed work against the plan, domain contracts, and actual failure boundaries. |
+| `write-code-comments` | `implement` | Write or revise only comments and docstrings that preserve non-obvious reasons, constraints, or invariants. |
+
+Helpers are not additional workflow roles. They provide focused domain rules or
+procedures inside a role's assignment and never orchestrate the overall task.
+The `build-*` skills are shared domain truth; `verify-implementation` is an
+implementer self-gate, not an independent approval role.
 
 ## Design constraints
 
