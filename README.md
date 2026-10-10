@@ -1,8 +1,8 @@
-# kstack
+# software-engineering
 
-`kstack` is Krish's personal Codex software-delivery stack. It turns a
-high-level blueprint into an implementation-grade plan, executes that plan,
-and verifies the result without collapsing planning and coding into one role.
+`software-engineering` is Krish's personal Codex skill system for turning a
+high-level blueprint into an implementation-grade plan, executing that plan,
+and verifying the result without collapsing planning and coding into one role.
 
 ## Orchestration entrypoint
 
@@ -10,10 +10,11 @@ and verifies the result without collapsing planning and coding into one role.
 | --- | --- |
 | `execute` | Frame a blueprint, preserve the working artifacts, and route work between the two roles. |
 
-Use `execute` when starting with a blueprint and asking kstack to carry it
-through planning, implementation, and evidence-based completion. It is the one
-entrypoint for the complete workflow. It invokes high-level roles; it does not
-perform their work or select helpers for them.
+Use `execute` when starting with a blueprint and asking
+`software-engineering` to carry it through planning, implementation, and
+evidence-based completion. It is the one entrypoint for the complete workflow.
+It invokes high-level roles; it does not perform their work or select helpers
+for them.
 
 ## High-level role skills
 
@@ -67,8 +68,8 @@ Clone the repository and copy the desired skill directories into the Codex
 skills directory:
 
 ```sh
-git clone https://github.com/isobarbaric/kstack.git
-cd kstack
+git clone https://github.com/isobarbaric/software-engineering.git
+cd software-engineering
 rsync -a skills/ /Users/krish/.codex/skills/
 ```
 
