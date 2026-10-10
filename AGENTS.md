@@ -6,8 +6,11 @@
   `engineer` and `implement`; role skills choose helper skills.
 - Keep planning and coding ownership disjoint. `engineer` does not edit product
   code, and `implement` does not silently revise material plan decisions.
-- Treat `build-frontend`, `build-backend`, and `build-migrations` as shared
-  domain helpers. Keep `verify-implementation` as the implementer self-gate.
+- Treat bounded helper skills as one common pool. `engineer` and `implement`
+  select applicable helpers without creating fixed role-owned branches;
+  `execute` does not select helpers directly.
+- Keep `verify-implementation` as the implementer self-gate in the normal
+  workflow, not as an independent approval role.
 - Keep helper names capability-based. Use `write-code-comments` for the
   personal code-commenting conventions.
 - Do not add a fixed workflow state machine without a demonstrated persistence,
