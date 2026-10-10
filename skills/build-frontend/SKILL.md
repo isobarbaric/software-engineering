@@ -12,18 +12,19 @@ repository, identify its equivalent package root. This is the entrypoint for
 frontend application guidance; load only the references that match the changed
 behavior.
 
-For sf-platform pull-request reviews, also use `$krish-pr-review` when it is
-present in the available-skills catalog. This skill supplies the frontend
-domain rules; the review skill owns the static-review workflow and verdict.
+For frontend reviews, apply these domain rules to the complete diff and return
+only evidence-backed findings with concrete mechanisms and consequences.
 
 When the change affects what people see or interact with, preserve the product's
 established visual system and verify the actual interaction surface. This skill
 owns React structure, not an unrequested visual redesign.
 
-Use `naming-litigation` for identifier decisions. For logging or editor
-subsystem work, compose only with applicable guidance surfaced in the
-available-skills catalog; otherwise follow repository instructions and source
-precedent without loading an undisclosed skill path.
+For identifier decisions, name the real owner, scope, lifecycle, and operation;
+match mature repository convention and propagate a rename through files,
+exports, types, imports, tests, and mocks without compatibility aliases. For
+logging or editor subsystem work, compose only with applicable guidance
+surfaced in the available-skills catalog; otherwise follow repository
+instructions and source precedent without loading an undisclosed skill path.
 
 Do not turn this into an editor subsystem guide. Avoid editor wiring
 inventories, Y.js details, and content-state maps unless the task requires them.

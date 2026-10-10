@@ -39,11 +39,13 @@ problem first.
 - Use `$build-migrations` in the same pass whenever a persisted table, column,
   relationship, index, constraint, or stored value meaning changes.
 
-The owning role may compose this skill with `naming-litigation` for changed
-domain vocabulary and `$verify-implementation` for implementation evidence.
-Use only skills surfaced in the available-skills catalog. Repository
-instructions remain authoritative when they do not conflict with skill
-isolation or higher-priority instructions.
+Keep changed domain vocabulary consistent across routes, schemas, services,
+repositories, logs, tasks, and tests. Prefer names that expose the real owner,
+scope, lifecycle, and lookup key while matching mature repository convention.
+Use `$verify-implementation` for implementation evidence. Use only skills
+surfaced in the available-skills catalog. Repository instructions remain
+authoritative when they do not conflict with skill isolation or higher-priority
+instructions.
 
 ## Execute
 

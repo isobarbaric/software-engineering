@@ -58,5 +58,5 @@ enough evidence for a shared abstraction.
 
 Use matching `UpperCamelCase` names for component files, matching
 `useLowerCamelCase` names for hook files, and lowercase kebab-case for utility
-and non-hook function files. Use `naming-litigation` for identifier or module
-naming decisions when it is present in the available-skills catalog.
+and non-hook function files. Names should expose the real owner, scope,
+lifecycle, and operation while matching mature neighboring modules.
