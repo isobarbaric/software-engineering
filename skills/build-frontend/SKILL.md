@@ -1,72 +1,63 @@
 ---
 name: build-frontend
-description: Plan, implement, or review React and TypeScript application behavior across ownership, state, effects, query caches, routing, composition, layout, and interaction. Use for frontend product code and compose with backend or migration skills when contracts cross those boundaries.
+description: Use for implementation, bug fixes, refactors, or reviews of React and TypeScript application code. Applies to components, hooks and effects, API and query-cache logic, client state, routing, providers, layouts, module boundaries, and interaction behavior, even when the task never says React or frontend.
 ---
 
 # Build Frontend
 
-Use this as the top-level entrypoint for React and TypeScript application work.
-It owns frontend architecture and behavior; the approved plan owns the requested
-outcome and scope.
+Use this skill before implementing, fixing, refactoring, or reviewing React or
+TypeScript application code, even when the task never says React or frontend.
+In sf-platform, the primary application surface is `frontend/src/`; in another
+repository, identify its equivalent package root. This is the entrypoint for
+frontend application guidance; load only the references that match the changed
+behavior.
 
-Before changing code, establish:
+For sf-platform pull-request reviews, also use `$krish-pr-review` when it is
+present in the available-skills catalog. This skill supplies the frontend
+domain rules; the review skill owns the static-review workflow and verdict.
 
-- the owner of each changed behavior;
-- the authoritative source of each value and identity;
-- the state category and lifecycle of every new or moved value;
-- the API, cache, route, and component contracts that change together;
-- preserved interaction behavior and explicit non-goals;
-- the failure boundary and evidence that will prove it.
+When the change affects what people see or interact with, preserve the product's
+established visual system and verify the actual interaction surface. This skill
+owns React structure, not an unrequested visual redesign.
 
-Do not add a fallback, context, effect, refetch, wrapper, or boolean prop until
-its independent invariant is named.
+Use `naming-litigation` for identifier decisions. For logging or editor
+subsystem work, compose only with applicable guidance surfaced in the
+available-skills catalog; otherwise follow repository instructions and source
+precedent without loading an undisclosed skill path.
 
-## Read the applicable guidance
+Do not turn this into an editor subsystem guide. Avoid editor wiring
+inventories, Y.js details, and content-state maps unless the task requires them.
 
-- Read [architecture-and-ownership.md](references/architecture-and-ownership.md)
-  for module boundaries, authoritative state, types, and abstractions.
-- Read [state-data-and-routing.md](references/state-data-and-routing.md) for
-  URL identity, state classification, effects, query caches, and external
-  stores.
-- Read [composition-and-interaction.md](references/composition-and-interaction.md)
-  for context, shared UI, layout, search, and interaction affordances.
+## Core Execution Contract
 
-The owning role may compose this skill with `naming-litigation` for changed
-identifiers or domain vocabulary and `$verify-implementation` for
-implementation evidence. Use only skills surfaced in the available-skills
-catalog.
+An approved technical direction is binding. Do not reopen architecture
+exploration, offer more options, or wait for confirmation on implementation
+details that source inspection and peer precedent can resolve.
 
-## Execute the frontend contract
+Identify the behavior owner and authoritative source before editing. Use the
+architecture reference when those boundaries need investigation or a tradeoff
+decision. Stop only when a missing decision would materially change product
+behavior, a public contract, authorization, data semantics, or deployment safety.
 
-- Derive values already available from props, URL state, query data, or a
-  domain enum instead of storing them again.
-- Use effects only to synchronize with a real external system or post-render
-  boundary. Use callbacks, query lifecycle, render derivation, or keyed owner
-  remounts for ordinary React coordination.
-- Fix cache invariants directly. Do not use forced refetches, zero stale time,
-  or broad invalidation to conceal an incorrect cache write.
-- Keep transport hooks presentation-free. Domain orchestrators own workflow and
-  user feedback; shared components receive explicit data and callbacks.
-- Use context only across a real tree, outlet, portal, or stable multi-consumer
-  boundary—not to avoid shallow props or imports.
-- Represent closed states and subtype-dependent fields explicitly. Do not use
-  optional fields and unrelated booleans to permit impossible combinations.
-- Preserve hover, focus, keyboard, navigation, loading, empty, denied, and
-  error behavior that the plan does not intentionally change.
-- Add an abstraction only when it owns policy, lifecycle, a domain operation,
-  or real repeated behavior.
+## Read The Relevant Reference
 
-Follow mature neighboring modules unless the plan identifies a real difference.
-Keep current domain vocabulary aligned across API types, query keys, hooks,
-components, tests, and mocks.
-
-## Verify and hand off
-
-Inspect the final diff for duplicate truth, effect-based internal coordination,
-hidden storage fallbacks, broad cache churn, unjustified context, coupled props,
-stale routes, impossible actions, and unrequested compatibility behavior.
-
-Verification must cover the changed owner and meaningful state partition. Use
-a browser when focus, layout, portals, navigation, timing, or browser storage is
-the actual boundary; do not use broad browser success as a substitute for a
-focused deterministic invariant.
+- For ownership, tradeoffs, simplification, shared behavior, type contracts,
+  and verification: [architecture.md](references/architecture.md).
+- For HTTP transport, typed request parameters, and presigned uploads:
+  [api-hooks.md](references/api-hooks.md).
+- For query keys, mutations, invalidation, optimistic updates, and cache scope:
+  [query-cache.md](references/query-cache.md).
+- For workflows that coordinate queries, mutations, typed URL state,
+  selections, and filtered view models: [manager-hooks.md](references/manager-hooks.md).
+- For routes, navigation, deep links, project identity, and resource URLs:
+  [routing-and-urls.md](references/routing-and-urls.md).
+- For React state, effects, browser persistence, subscriptions, and remounts:
+  [state-synchronization.md](references/state-synchronization.md).
+- For expired sessions, stream reconnects, and recovery behavior:
+  [auth-session-recovery.md](references/auth-session-recovery.md).
+- For shared/domain component boundaries, feature context, callbacks,
+  action availability, and presentation: [component-composition.md](references/component-composition.md).
+- For package placement, imports, utilities, stores, types, and entry points:
+  [module-structure.md](references/module-structure.md).
+- For provider nesting, panels, sidebars, portals, and layout ownership:
+  [layouts-and-providers.md](references/layouts-and-providers.md).
