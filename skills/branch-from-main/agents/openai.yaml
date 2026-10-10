@@ -1,0 +1,4 @@
+interface:
+  display_name: "Branch from Main"
+  short_description: "Helper for naming PR branches from main."
+  default_prompt: "Use $branch-from-main to name a concise PR branch and commit message from main."
