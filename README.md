@@ -86,3 +86,8 @@ Restart or reload Codex if its skill catalog does not refresh automatically.
 Each directory under `skills/` is independently installable. A skill keeps its
 entrypoint in `SKILL.md`, focused guidance in `references/`, and UI metadata in
 `agents/openai.yaml`.
+
+`packages/code-contracts/` contains deterministic code contracts. Its
+`general` preset is reusable across React/TypeScript repositories; its
+`software-factory` preset layers repository-specific contracts on top without
+leaking those assumptions into the portable rules.

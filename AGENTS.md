@@ -24,5 +24,8 @@
   it.
 - Validate every changed skill with Codex's canonical skill validator and
   check every relative Markdown link before publishing.
+- Keep deterministic lint rules split by contract scope. General rules must
+  not depend on Software Factory paths, imports, or vocabulary; the
+  `software-factory` preset may layer those repository contracts on top.
 - Preserve published branch history. Add commits; do not amend, rebase, or
   force-push unless the user explicitly requests history rewriting.
