@@ -15,10 +15,12 @@ what a plan item means, the plan is not finished.
 Read [trace-derived-taste.md](references/trace-derived-taste.md) before planning.
 Load every applicable domain skill from the available-skills catalog instead of
 duplicating its rules here. Use `$build-frontend`, `$build-backend`, and
-`$build-migrations` for the surfaces they own. When the plan introduces or
-changes domain vocabulary, choose names that state the real owner, scope, and
-lifecycle and match mature repository convention. Never load an undisclosed
-skill path merely because repository prose references it; report the conflict.
+`$build-migrations` for the surfaces they own. Use `$name-software-concepts`
+when the plan introduces or changes shared domain vocabulary, public contracts,
+packages, rules, schemas, or architectural boundaries. Its recommendation must
+state the real owner, scope, lifecycle, and operation and match mature
+repository convention. Never load an undisclosed skill path merely because
+repository prose references it; report the conflict.
 
 When invoked by `$execute`, treat its blueprint as the intent contract. Preserve
 its outcome, constraints, acceptance criteria, and non-goals while converting

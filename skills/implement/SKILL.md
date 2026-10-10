@@ -24,6 +24,12 @@ its focused references, and then executes the plan under those rules.
 5. Read [trace-derived-taste.md](references/trace-derived-taste.md) as the
    personal implementation overlay.
 
+Use `$name-software-concepts` when implementation must choose a consequential
+name the plan intentionally leaves mechanical, or when source evidence reveals
+a collision or overloaded term. If the better name would revise plan vocabulary
+or a public contract, return it to the engineer as a decision delta instead of
+silently renaming the design.
+
 Stop if there is no concrete plan. Do not quietly perform the engineer role and
 then implement an unreviewed design. Do not edit the plan while acting as the
 implementer; the engineer owns revisions.

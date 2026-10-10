@@ -1,0 +1,4 @@
+interface:
+  display_name: "Name Software Concepts"
+  short_description: "Choose precise names for software concepts"
+  default_prompt: "Use $name-software-concepts to propose and litigate names for this software concept, recommend one, and propagate an approved rename."

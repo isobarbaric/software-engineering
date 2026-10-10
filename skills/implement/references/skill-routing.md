@@ -22,10 +22,13 @@ conflict with skill isolation or higher-priority instructions.
 ## Apply the remaining helpers and constraints
 
 - Use `write-code-comments` when adding or revising comments or docstrings.
+- Use `$name-software-concepts` when introducing or changing shared domain
+  vocabulary, public identifiers, packages, rules, schemas, configuration keys,
+  or cross-surface concepts. Do not invoke it for every local variable when
+  mature neighboring code already settles the name.
 - Use `$verify-implementation` for the implementation self-gate.
-- When introducing or changing identifiers or domain vocabulary, name the real
-  owner, scope, lifecycle, and operation; match mature repository convention
-  and propagate the rename through every affected surface without aliases.
+- Apply its approved recommendation through every affected surface without
+  compatibility aliases unless the plan explicitly requires them.
 - Treat branch creation, previews, commits, pushes, pull requests, and
   deployments as separate delivery actions. Perform them only when the user
   authorizes them, using the repository's established workflow.
