@@ -1,0 +1,4 @@
+interface:
+  display_name: "Execute"
+  short_description: "Carry a blueprint through verified implementation"
+  default_prompt: "Use $execute to carry this blueprint through engineering, implementation, and verification."

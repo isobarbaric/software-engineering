@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Migrations"
+  short_description: "Evolve schemas and data safely"
+  default_prompt: "Use $build-migrations to design and implement this persisted-schema change safely."

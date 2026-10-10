@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Backend"
+  short_description: "Implement backend contracts and workflows"
+  default_prompt: "Use $build-backend to implement this server-side change under the repository's backend conventions."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Engineer"
+  short_description: "Create an implementation-ready engineering plan"
+  default_prompt: "Use $engineer to investigate this change and produce a code-level plan for a fresh implementer."

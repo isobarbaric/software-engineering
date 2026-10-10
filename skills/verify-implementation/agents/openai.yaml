@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Implementation"
+  short_description: "Prove an implementation matches its plan"
+  default_prompt: "Use $verify-implementation to verify this completed change against its approved plan and domain contracts."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement"
+  short_description: "Execute an approved engineering plan"
+  default_prompt: "Use $implement to execute this approved plan and return any decision deltas instead of redesigning it silently."

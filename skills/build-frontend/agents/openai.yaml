@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Frontend"
+  short_description: "Plan and build frontend application behavior"
+  default_prompt: "Use $build-frontend to plan or implement this React and TypeScript application change."
