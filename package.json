@@ -1,0 +1,10 @@
+{
+  "name": "software-engineering",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "lint": "pnpm --filter @isobarbaric/code-contracts lint",
+    "test": "pnpm --filter @isobarbaric/code-contracts test"
+  }
+}

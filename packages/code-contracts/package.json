@@ -1,0 +1,30 @@
+{
+  "name": "@isobarbaric/code-contracts",
+  "version": "0.1.0",
+  "description": "Deterministic code contracts for React and Software Factory frontends.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "lint": "eslint src tests",
+    "test": "node --test"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/parser": "^8.71.1",
+    "eslint": "^10.12.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
