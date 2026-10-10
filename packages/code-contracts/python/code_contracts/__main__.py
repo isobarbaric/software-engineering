@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Iterable
 
 from code_contracts import Diagnostic
-from code_contracts.rules import RULES
+from code_contracts.rules import Rule, rules_for_profile
 
 
 def _python_files(paths: Iterable[str]) -> Iterable[Path]:
@@ -44,12 +44,14 @@ def _syntax_diagnostic(path: str, error: SyntaxError) -> Diagnostic:
     )
 
 
-def _check_source(source: str, path: str) -> list[Diagnostic]:
+def _check_source(
+    source: str, path: str, rules: tuple[Rule, ...]
+) -> list[Diagnostic]:
     try:
         ast.parse(source, filename=path)
     except SyntaxError as error:
         return [_syntax_diagnostic(path, error)]
-    return [diagnostic for rule in RULES for diagnostic in rule(source, path=path)]
+    return [diagnostic for rule in rules for diagnostic in rule(source, path=path)]
 
 
 def _stdin_sources() -> list[tuple[str, str]]:
@@ -72,6 +74,12 @@ def _stdin_sources() -> list[tuple[str, str]]:
 def main() -> int:
     parser = argparse.ArgumentParser(prog="python3 -m code_contracts")
     parser.add_argument("paths", nargs="*", help="Python files or directories.")
+    parser.add_argument(
+        "--profile",
+        choices=["general", "software-factory"],
+        default="general",
+        help="Select the reusable or Software Factory contract profile.",
+    )
     parser.add_argument(
         "--stdin-json",
         action="store_true",
@@ -98,10 +106,11 @@ def main() -> int:
             for path in _python_files(arguments.paths)
         ]
 
+    rules = rules_for_profile(arguments.profile)
     diagnostics = [
         diagnostic
         for path, source in sources
-        for diagnostic in _check_source(source, path)
+        for diagnostic in _check_source(source, path, rules)
     ]
     diagnostics.sort(key=lambda item: (item.path, item.line, item.column, item.rule))
 

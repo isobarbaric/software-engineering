@@ -19,7 +19,9 @@
   "scripts": {
     "check": "node bin/code-contracts.js check",
     "lint": "eslint bin src tests && python3 -m compileall -q python",
-    "test": "node --test"
+    "test": "pnpm run test:eslint && pnpm run test:python",
+    "test:eslint": "node --test",
+    "test:python": "python3 -m unittest discover -s python/tests -p 'test_*.py'"
   },
   "peerDependencies": {
     "eslint": "^9.0.0 || ^10.0.0"

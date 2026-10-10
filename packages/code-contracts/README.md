@@ -187,6 +187,64 @@ change that must update the contract rather than relying on component names or
 directory folklore. Tests and stories are not generally exempt; the canonical
 tree-utility test is an owner-boundary test and is listed explicitly.
 
+## General Python rules
+
+| Rule | Deterministic contract |
+| --- | --- |
+| `no-tuple-service-results` | Public service methods do not return positional tuple products; named multi-value result envelopes are Pydantic models. |
+| `no-generic-domain-exceptions` | Services and repositories raise domain-specific failures instead of `ValueError`, `RuntimeError`, or `Exception`. |
+| `repositories-do-not-control-transactions` | Repositories may flush work but may not begin, commit, or roll back SQLAlchemy transactions. |
+| `sqlalchemy-query-columns-use-model-attributes` | SQLAlchemy column-selection APIs receive symbolic model attributes rather than string column names. |
+
+`no-tuple-service-results` applies to public methods on classes whose names end
+in `Service`, including classes that inherit a locally declared service class.
+It rejects tuple annotations recursively, direct and locally propagated tuple
+values, and local `*Result` classes that do not inherit Pydantic's `BaseModel`.
+This includes dataclasses, `NamedTuple`, `TypedDict`, plain result classes, and
+their functional declaration forms. Private helpers remain implementation
+details. Single entities, scalar values, collections, `None`, and Pydantic
+result models remain valid. There are no filename exemptions. A required
+framework override must be exempted by its exact `Class.method` identity.
+
+`no-generic-domain-exceptions` covers sync, async, public, private, static, and
+class methods on service and repository implementations, including local and
+imported boundary subclasses. It resolves builtin namespaces and aliases while
+respecting lexical shadowing. Bare re-raises, `NotImplementedError`, specific
+domain/library exceptions, Pydantic validators, and explicitly configured CLI
+or configuration parsing paths remain valid. Test files are not exempt.
+
+`repositories-do-not-control-transactions` follows actual `Session` and
+`AsyncSession` annotations into repository attributes and local aliases. It
+rejects `begin`, `begin_nested`, `commit`, and `rollback`, including awaited
+calls and context managers. `add`, `delete`, `merge`, `flush`, `refresh`,
+`expire`, queries, and statement execution remain valid. Objects that merely
+have similarly named methods are not treated as SQLAlchemy sessions. Unit of
+work and transaction-manager boundaries are explicit owners, not suppressions.
+
+`sqlalchemy-query-columns-use-model-attributes` resolves SQLAlchemy imports,
+aliases, namespaces, statement chains, legacy `Session.query` calls, and loader
+options. It rejects strings in configured column-selection functions and
+methods while allowing foreign-key targets, relationship forward references,
+explicit `text` and `literal_column` boundaries, labels, defaults, predicate
+values, and update values.
+
+## Software Factory Python rules
+
+| Rule | Repository contract |
+| --- | --- |
+| `scoped-responses-include-scope-ids` | Explicitly organization-scoped responses serialize a required `organization_id: UUID`; explicitly project-scoped responses serialize both `organization_id: UUID` and `project_id: UUID`. |
+
+`scoped-responses-include-scope-ids` never infers scope from a suggestive class
+or field name. Scope is selected explicitly by canonical base, exact model
+identity, or response package. Fields may be direct or locally inherited, but
+must be required, non-null UUIDs serialized under their exact snake-case names.
+Aliases, exclusions, defaults, factories, nullable unions, `ClassVar`, private
+attributes, and computed properties do not satisfy the wire contract. Generic
+wrappers and abstract response bases are exempt; concrete scoped collection
+responses are not. The Software Factory CLI profile recognizes
+`OrganizationScopedResponse` and `ProjectScopedResponse` as its canonical
+scope-marker bases.
+
 ## Adoption
 
 Do not enable the full preset and wave through thousands of suppressions. Run

@@ -16,13 +16,14 @@ const allOptions = (repo, profile = "general") => ({
   format: "text",
 });
 
-test("routes TypeScript and Python through their native analyzers", async (t) => {
+test("checks TypeScript and Python through their native analyzers", async (t) => {
   const repository = createRepository({
     "frontend/src/Two.tsx": `
       export const First = () => <div />;
       export const Second = () => <span />;
     `,
-    "backend/read_service.py": "class ReadService:\n    pass\n",
+    "backend/read_service.py":
+      "class ReadService:\n    def read(self) -> tuple[int, int]:\n        return 1, 2\n",
   });
   t.after(repository.cleanup);
 
@@ -38,6 +39,16 @@ test("routes TypeScript and Python through their native analyzers", async (t) =>
       code,
     })),
     [
+      {
+        language: "python",
+        rule: "no-tuple-service-results",
+        code: "tuple-return-annotation",
+      },
+      {
+        language: "python",
+        rule: "no-tuple-service-results",
+        code: "tuple-return-value",
+      },
       {
         language: "typescript",
         rule: "contracts/one-react-component-per-file",
@@ -69,9 +80,39 @@ test("software-factory profile layers repository contracts over general rules", 
   );
 });
 
+test("software-factory profile applies scoped Python response contracts", async (t) => {
+  const repository = createRepository({
+    "backend/responses.py":
+      "from pydantic import BaseModel\n\n" +
+      "class ProjectScopedResponse(BaseModel):\n    pass\n\n" +
+      "class ProjectResponse(ProjectScopedResponse):\n    pass\n",
+  });
+  t.after(repository.cleanup);
+
+  const general = await runCheck(allOptions(repository.repo));
+  const softwareFactory = await runCheck(
+    allOptions(repository.repo, "software-factory"),
+  );
+  assert.equal(general.diagnostics.length, 0);
+  assert.deepEqual(
+    softwareFactory.diagnostics.map(({ rule, code }) => ({ rule, code })),
+    [
+      {
+        rule: "scoped-responses-include-scope-ids",
+        code: "missing-organization-id",
+      },
+      {
+        rule: "scoped-responses-include-scope-ids",
+        code: "missing-project-id",
+      },
+    ],
+  );
+});
+
 test("changed-since reports changed violations without auditing untouched files", async (t) => {
   const repository = createRepository({
-    "backend/untouched_service.py": "def untouched(:\n",
+    "backend/untouched_service.py":
+      "class UntouchedService:\n    def read(self): return 1, 2\n",
     "backend/changed_service.py":
       "class ChangedService:\n    def read(self): return None\n",
   });
@@ -80,7 +121,7 @@ test("changed-since reports changed violations without auditing untouched files"
   write(
     repository.repo,
     "backend/changed_service.py",
-    "def changed(:\n",
+    "class ChangedService:\n    def read(self): return 3, 4\n",
   );
 
   const result = await runCheck({
@@ -93,7 +134,6 @@ test("changed-since reports changed violations without auditing untouched files"
   assert.deepEqual(result.files, ["backend/changed_service.py"]);
   assert.equal(result.diagnostics.length, 1);
   assert.equal(result.diagnostics[0].path, "backend/changed_service.py");
-  assert.equal(result.diagnostics[0].code, "syntax-error");
 });
 
 test("staged checks index content even when worktree content is valid", async (t) => {
@@ -105,7 +145,7 @@ test("staged checks index content even when worktree content is valid", async (t
   write(
     repository.repo,
     "backend/read_service.py",
-    "def staged(:\n",
+    "class ReadService:\n    def read(self): return 1, 2\n",
   );
   git(repository.repo, "add", "backend/read_service.py");
   write(
@@ -122,7 +162,7 @@ test("staged checks index content even when worktree content is valid", async (t
     format: "text",
   });
   assert.equal(result.diagnostics.length, 1);
-  assert.equal(result.diagnostics[0].code, "syntax-error");
+  assert.equal(result.diagnostics[0].code, "tuple-return-value");
 });
 
 test("returns deterministic syntax diagnostics instead of runner tracebacks", async (t) => {
@@ -160,7 +200,7 @@ test("CLI returns zero for clean input and one with JSON diagnostics", (t) => {
   write(
     repository.repo,
     "backend/read_service.py",
-    "def invalid(:\n",
+    "class ReadService:\n    def read(self): return 1, 2\n",
   );
   const invalid = spawnSync(
     process.execPath,

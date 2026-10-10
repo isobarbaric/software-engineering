@@ -60,7 +60,7 @@ const checkTypescript = async ({ repo, profile, sources }) => {
   return diagnostics;
 };
 
-const checkPython = ({ sources }) => {
+const checkPython = ({ profile, sources }) => {
   if (sources.length === 0) {
     return [];
   }
@@ -75,6 +75,8 @@ const checkPython = ({ sources }) => {
       "--stdin-json",
       "--format",
       "json",
+      "--profile",
+      profile,
     ],
     {
       encoding: "utf8",
@@ -124,6 +126,7 @@ const runCheck = async (options) => {
     }),
     Promise.resolve(
       checkPython({
+        profile: options.profile,
         sources: sources.filter(({ relativePath }) =>
           PYTHON_EXTENSION.test(relativePath),
         ),
