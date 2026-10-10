@@ -10,7 +10,7 @@ Template components own reusable presentation, visual states, and local
 interaction state. They accept explicit data, slots, and callbacks and remain
 domain-light.
 
-Domain components own domain hooks, project scope, route state, mutations,
+Domain components own domain hooks, scope identity, route state, mutations,
 domain copy, empty states, and event procedures. They translate domain data
 into the template contract.
 
@@ -47,5 +47,5 @@ not-found states. The content component should receive non-null required data.
 
 ## Presentation
 
-Use menu and popover primitives' `side` and `align` APIs for placement instead
-of CSS nudges. Follow the local module's empty-state spacing and styling.
+Use the component primitive's supported placement API instead of CSS nudges.
+Follow the local module's empty-state spacing and styling.

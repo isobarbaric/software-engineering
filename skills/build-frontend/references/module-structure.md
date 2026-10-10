@@ -1,6 +1,6 @@
 # Frontend Module Structure
 
-Read this reference when creating, moving, or reviewing files under `frontend/src`,
+Read this reference when creating, moving, or reviewing frontend files,
 especially when a feature owns more than one kind of component, hook, type,
 store, or utility.
 
@@ -10,53 +10,49 @@ context decisions.
 
 ## Package Boundaries
 
-- `src/lib/<module>/` contains reusable, domain-light building blocks and must
-  not import from `src/app/`.
-- `src/app/<module>/` contains one product area.
-- `src/app/<module>/<sub-module>/` is a real package for a coherent feature,
-  not merely a grouping folder.
+Keep reusable, domain-light building blocks below product-specific modules in
+the dependency graph. Shared infrastructure must not import product areas.
+Product modules may compose shared packages and should expose deliberate public
+entry points rather than relying on incidental deep imports.
 
-Keep pure selectors in a neutral dependency layer that consumers can import.
-Lower-level infrastructure must not import helpers from components, agent
-tools, or other presentation packages.
+Create a feature subpackage when a coherent capability owns several file
+categories or a meaningful internal boundary. Do not manufacture folders for a
+single file, but do not split one feature across distant global component and
+hook directories when those files evolve together.
 
-Prefer deep modules once a feature owns multiple file categories. Do not split
-one feature across `components/<feature>` and `hooks/<feature>` when it should
-be a sub-module.
+Keep pure selectors in a neutral dependency layer that every consumer can
+import. Lower-level infrastructure must not import helpers from components,
+agent tools, or other presentation packages.
 
-## Directory Ownership
+## Responsibility Placement
 
-```text
-components/  domain-facing React composition
-effects/     named hooks that isolate required React effects
-hooks/api/    HTTP transport
-hooks/query/  React Query state and query keys
-hooks/manager/ orchestration and business intent
-hooks/contexts/ focused shared state boundaries
-store/        module-local persistence accessors and key builders
-util/         pure helpers without React or network behavior
-types/        dependency-light shared types
-index.ts      curated public entry point
-```
+Preserve distinct homes for these responsibilities using the repository's
+established directory names:
 
-Do not put raw HTTP in components, React Query in API hooks, persistence in
-`util/`, or hidden network logic in pure helpers.
+- domain-facing React composition;
+- external synchronization effects;
+- HTTP transport;
+- server-query and cache ownership;
+- workflow orchestration;
+- focused shared-state boundaries;
+- browser persistence;
+- pure helpers without React or network behavior;
+- dependency-light shared types;
+- curated public exports.
 
-Put `effects/` at the root of the package that owns the synchronization, beside
-`components/` and `hooks/`, rather than under `hooks/` or in a global effect
-collection. Name each effect-hook file `useLowerCamelCase.ts`. The file must
-export exactly one function: a hook whose name exactly matches the filename
-without `.ts`. It may contain private types and helpers. For example,
-`frontend/src/lib/initialization/effects/useInitializationFailureReporting.ts`
-exports only `useInitializationFailureReporting`.
-Read [state-synchronization.md](state-synchronization.md) for effect necessity,
-lifecycle, and testing requirements.
+Do not put raw HTTP in components, query-cache behavior in transport hooks,
+persistence in a generic utility directory, or hidden network behavior in pure
+helpers.
+
+Place named synchronization hooks inside the package that owns the external
+system. Follow the repository's naming, export, and directory conventions; the
+hook boundary should make setup, cleanup, dependencies, and testing legible.
+Read [state-synchronization.md](state-synchronization.md) for effect necessity
+and lifecycle requirements.
 
 Before extracting shared code, verify that call sites have the same behavior,
-dependencies, lifecycle, and error handling. Similar-looking code is not
-enough evidence for a shared abstraction.
+dependencies, lifecycle, and error handling. Similar-looking code is not enough
+evidence for a shared abstraction.
 
-Use matching `UpperCamelCase` names for component files, matching
-`useLowerCamelCase` names for hook files, and lowercase kebab-case for utility
-and non-hook function files. Names should expose the real owner, scope,
-lifecycle, and operation while matching mature neighboring modules.
+Match neighboring filename and export conventions. Names should expose the real
+owner, scope, lifecycle, and operation.

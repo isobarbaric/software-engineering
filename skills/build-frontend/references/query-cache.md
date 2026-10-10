@@ -20,13 +20,13 @@ in components, contexts, or manager hooks.
 ## Query Identity
 
 Query keys must include every scope dimension that changes the result:
-organization, project, resource identity, filters, search parameters, and
-feature-specific modes. Do not pass nullable IDs to key factories when the
-query requires an identity; structure the component boundary so the key gets a
-required ID.
+tenant, workspace, resource identity, filters, search parameters, and
+feature-specific modes as applicable. Do not pass nullable IDs to key factories
+when the query requires an identity; structure the component boundary so the
+key gets a required ID.
 
-Project and organization switches must not display or reuse data from the old
-scope. Avoid `keepPreviousData` across privacy or authorization boundaries.
+Scope switches must not display or reuse data from the previous authorization
+boundary. Avoid `keepPreviousData` across privacy or authorization scopes.
 
 ## Cache Correctness
 

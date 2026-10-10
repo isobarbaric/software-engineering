@@ -7,10 +7,9 @@ description: Use for implementation, bug fixes, refactors, or reviews of React a
 
 Use this skill before implementing, fixing, refactoring, or reviewing React or
 TypeScript application code, even when the task never says React or frontend.
-In sf-platform, the primary application surface is `frontend/src/`; in another
-repository, identify its equivalent package root. This is the entrypoint for
-frontend application guidance; load only the references that match the changed
-behavior.
+Identify the repository's application root and established frontend stack. This
+is the entrypoint for frontend application guidance; load only the references
+that match the changed behavior.
 
 For frontend reviews, apply these domain rules to the complete diff and return
 only evidence-backed findings with concrete mechanisms and consequences.
@@ -21,13 +20,10 @@ owns React structure, not an unrequested visual redesign.
 
 For identifier decisions, name the real owner, scope, lifecycle, and operation;
 match mature repository convention and propagate a rename through files,
-exports, types, imports, tests, and mocks without compatibility aliases. For
-logging or editor subsystem work, compose only with applicable guidance
-surfaced in the available-skills catalog; otherwise follow repository
-instructions and source precedent without loading an undisclosed skill path.
-
-Do not turn this into an editor subsystem guide. Avoid editor wiring
-inventories, Y.js details, and content-state maps unless the task requires them.
+exports, types, imports, tests, and mocks without compatibility aliases. Compose
+only with applicable guidance surfaced in the available-skills catalog;
+otherwise follow repository instructions and source precedent without loading
+an undisclosed skill path.
 
 ## Core Execution Contract
 
@@ -42,6 +38,10 @@ behavior, a public contract, authorization, data semantics, or deployment safety
 
 ## Read The Relevant Reference
 
+- For work in the Software Factory repository, read
+  [software-factory.md](references/software-factory.md) in the same pass as the
+  applicable general references. It contains repository-specific contracts and
+  concrete application vocabulary; do not apply it to other repositories.
 - For ownership, tradeoffs, simplification, shared behavior, type contracts,
   and verification: [architecture.md](references/architecture.md).
 - For HTTP transport, typed request parameters, and presigned uploads:
@@ -50,7 +50,7 @@ behavior, a public contract, authorization, data semantics, or deployment safety
   [query-cache.md](references/query-cache.md).
 - For workflows that coordinate queries, mutations, typed URL state,
   selections, and filtered view models: [manager-hooks.md](references/manager-hooks.md).
-- For routes, navigation, deep links, project identity, and resource URLs:
+- For routes, navigation, deep links, scope identity, and resource URLs:
   [routing-and-urls.md](references/routing-and-urls.md).
 - For React state, effects, browser persistence, subscriptions, and remounts:
   [state-synchronization.md](references/state-synchronization.md).

@@ -25,7 +25,7 @@ Managers must not make raw HTTP calls, own query keys, show presentation
 toasts, or hide required identity behind nullable parameters. Fix the tree or
 provider boundary when a required ID does not exist.
 
-Routing owns URL schema, project identity, and navigation; managers decide how
+Routing owns URL schema, scope identity, and navigation; managers decide how
 the canonical typed values affect a workflow. State synchronization owns effects,
 storage, subscriptions, and remount behavior; managers must not introduce those
 mechanisms merely to coordinate internal React state. When a filter, page, or

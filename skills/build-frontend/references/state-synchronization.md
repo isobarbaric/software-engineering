@@ -34,15 +34,10 @@ Use effects only to synchronize React with a real external system. Prefer an
 event handler, render derivation, query lifecycle, or mutation lifecycle for
 internal React coordination.
 
-Every required effect must live in its own named custom hook file under the
-owning package's root `effects/` directory. Components, providers, managers,
-and other hooks compose these effect hooks instead of declaring `useEffect`
-inline. When changing an existing effect, extract it; do not require unrelated
-legacy effects to move in the same change.
-
-Name the file and hook together: `useLowerCamelCase.ts` must export exactly one
-function, the hook with the same name as the filename without `.ts`. Keep any
-supporting types and helpers private to the file.
+Isolate a non-trivial synchronization boundary in a named custom hook owned by
+the package that owns the external system. Follow the repository's file and
+export conventions. Do not extract an effect merely to relocate code; the hook
+must expose a coherent synchronization responsibility.
 
 Give each effect hook one coherent external-synchronization responsibility and
 keep its setup, cleanup, cancellation, and lifecycle bookkeeping together. Use
@@ -51,12 +46,11 @@ when inputs change, the component unmounts, or React Strict Mode replays setup
 and cleanup. Do not suppress dependency linting or hide reactive inputs to
 control execution.
 
-Name the hook for the synchronization behavior, such as
-`useInitializationFailureReporting`, rather than for a generic lifecycle such
-as `useMount`. Keep pure calculations outside the effect and test observable
-synchronization, dependency changes, cleanup, and stale asynchronous results at
-the hook boundary. Extraction does not justify an effect that has no external
-system.
+Name the hook for the synchronization behavior rather than for a generic
+lifecycle such as `useMount`. Keep pure calculations outside the effect and
+test observable synchronization, dependency changes, cleanup, and stale
+asynchronous results at the hook boundary. Extraction does not justify an
+effect that has no external system.
 
 When adding or behaviorally changing an effect hook, use applicable testing
 guidance surfaced in the available-skills catalog. Test observable
@@ -71,25 +65,26 @@ when the necessary data is already available before paint.
 When identity changes should reset a subtree, key the owner at the boundary:
 
 ```tsx
-<FeatureContent key={projectId} />
+<FeatureContent key={scopeId} />
 ```
 
 Do not patch identity changes with an effect that copies new props or query
-results into local state. Use `useWindowEventListener` for shared window
-listeners.
+results into local state. Use the repository's shared listener abstraction when
+one exists instead of duplicating subscription mechanics.
 
 Keep the changing key at the call site that owns the lifecycle boundary;
 static keys do not reset state.
 
 ## Browser Storage
 
-- Use the shared LocalStorage helpers; do not call raw storage methods from
-  components or hooks.
-- Put module-specific key builders and accessors in `store/`.
+- Use the repository's shared browser-storage boundary when one exists; do not
+  scatter raw storage access through components and hooks.
+- Keep feature-specific key builders and accessors in the feature's established
+  persistence module.
 - Choose a snapshot read when a caller needs one value and a subscribed
   external store when mounted UI must react to writes.
-- Scope keys by the real privacy boundary: user, organization, project,
-  module, or resource.
+- Scope keys by the real privacy boundary: user, tenant, workspace, feature, or
+  resource as applicable.
 - Deliberately migrate or remove changed persisted shapes; do not silently
   reinterpret old state.
 - Never persist credential-like URLs, invite tokens, or PII.

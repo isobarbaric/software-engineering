@@ -7,7 +7,7 @@ including S3 upload transport and request/response mapping.
 
 API hooks own HTTP only:
 
-- choose the correct layered base API hook;
+- use the repository's established HTTP client or base API hook;
 - unpack typed route, query, and body parameters;
 - call the endpoint;
 - return the typed response or typed transport result.
@@ -15,27 +15,22 @@ API hooks own HTTP only:
 They must not own React Query, cache invalidation, optimistic updates, shared
 state, toasts, component behavior, or domain placement decisions.
 
-Use typed `ApiRequestParams` objects rather than positional arguments. Use
-`NoRouteParams`, `NoQueryParams`, and `NoBodyParams` when a request bucket is
-unused. Never use raw `fetch` in a domain API hook.
+Prefer a typed parameter object over positional arguments when a request has
+multiple parameter categories. Do not bypass an established transport client
+with ad hoc network calls unless the boundary genuinely requires different
+transport behavior.
 
 ## Upload Transport
 
-`useS3Upload` is the application-wide, domain-neutral transport utility for
-every presigned S3 upload. Use it from any feature that uploads bytes to a
-presigned URL; do not create module-specific upload hooks that duplicate its
-progress tracking, result shape, or error classification.
+Use one domain-neutral transport utility for presigned uploads rather than
+creating feature-specific hooks that duplicate progress tracking, result shape,
+or error classification. Keep that utility limited to byte transport and
+transport-level failure reporting.
 
-Do not call the underlying `uploadFileToPresignedUrl` helper from domain hooks
-or components. `useS3Upload` owns the S3 PUT, progress reporting, and typed
-`S3UploadResult` failure classification. It is intentionally limited to that
-transport concern: it does not create application resources, choose a document
-tree location, show UI toasts, or invalidate queries.
-
-The domain mutation or manager that composes `useS3Upload` owns the rest of the
-workflow: request a presigned URL, decide whether to continue after an upload
-failure, create or update the resource, place it in the domain tree, and update
-or invalidate the affected query scope.
+The domain mutation or orchestrator owns the rest of the workflow: request an
+upload target, decide whether to continue after failure, create or update the
+domain resource, place it in the product's hierarchy when applicable, and
+update or invalidate the affected query scope.
 
 ## Types
 

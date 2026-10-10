@@ -9,7 +9,7 @@ the concrete React, routing, cache, component, layout, and package mechanics.
 
 Classify the change as one or more of:
 
-- routing or project identity
+- routing or scope identity
 - server data or cache
 - derived or ephemeral state
 - external synchronization
@@ -29,7 +29,7 @@ For every changed behavior, identify:
 If the owner or source of truth cannot be named, stop and inspect the render,
 route, provider, and query chain before adding glue.
 
-Search neighboring modules and shared `lib` for existing hooks, primitives,
+Search neighboring modules and shared packages for existing hooks, primitives,
 query-key factories, route helpers, and tests before inventing a mechanism.
 
 ## Tradeoffs And Feedback
@@ -87,11 +87,10 @@ components, tests, and mocks together. Backend storage names are not frontend
 domain contracts. Preserve legacy vocabulary only at an explicitly required
 public boundary.
 
-### Server enums are open sets
+### Treat server enums according to the API contract
 
-[API Compatibility Enforcement, ADR-011](https://factory.8090.ai/project/facffe35-75fc-4d5c-998e-db53f0431471/blueprints/bb5537d5-07eb-41a9-8877-37442f2e30ff)
-lets the backend add a response enum value without a client release and makes
-the client responsible for handling values it has never seen. In code that
+When the API contract permits the backend to add response enum values without a
+coordinated client release, treat those values as an open set. In code that
 means:
 
 - no `switch` over a server value ends in a throwing `never` guard;
@@ -100,8 +99,9 @@ means:
   neutral icon, or an "unsupported" notice;
 - each fallback has a unit test that passes a value outside the type.
 
-Throwing `never` guards remain right for values the client builds itself. A
-fallback for a server value is required behavior, not an unreachable branch.
+Throwing `never` guards remain right for closed values the client builds itself.
+Do not add fallbacks to a server enum merely by habit; the compatibility
+contract decides whether the set is open or closed.
 
 ## Rejection Gate
 
