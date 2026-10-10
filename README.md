@@ -36,6 +36,7 @@ return to the engineer as decision deltas.
 
 | Skill | Responsibility |
 | --- | --- |
+| `branch-from-main` | Choose and create a concise PR branch from `main` with a matching conventional commit message. |
 | `build-frontend` | Supply React and TypeScript rules for ownership, state, effects, caches, routing, composition, and interaction. |
 | `build-backend` | Supply backend rules for service boundaries, persistence, authorization, background work, and external effects. |
 | `build-migrations` | Supply schema-evolution, migration-review, rollout, compatibility, and forward-recovery rules. |
