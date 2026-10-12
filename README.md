@@ -1,118 +1,41 @@
 # software-engineering
 
-`software-engineering` is a skill system for coding agents that turns a
-high-level blueprint into an implementation-grade plan, executes that plan,
-and verifies the result without collapsing planning and coding into one role.
-It also includes `@isobarbaric/code-contracts`, a deterministic linter for
-TypeScript, React, and Python engineering contracts.
+Skills for coding agents to plan, implement, and verify software changes,
+plus a deterministic linter for TypeScript, React, and Python.
 
-## Orchestration entrypoint
+## Workflow
 
-| Skill | Responsibility |
-| --- | --- |
-| `execute` | Frame a blueprint, preserve the working artifacts, and route work between the two roles. |
-
-Use `execute` when starting with a blueprint and asking
-`software-engineering` to carry it through planning, implementation, and
-evidence-based completion. It is the one entrypoint for the complete workflow.
-It invokes high-level roles; it does not perform their work or select helpers
-for them.
-
-## High-level role skills
+Use `execute` to take a blueprint through planning, implementation, and
+verification. It delegates to two roles:
 
 | Skill | Responsibility |
 | --- | --- |
-| `engineer` | Investigate the repository and produce or revise a portable, code-level implementation contract. |
-| `implement` | Execute an approved plan, preserve its decisions, and return material deltas instead of silently redesigning. |
+| `engineer` | Investigate the repository and produce an implementation plan. |
+| `implement` | Execute the plan, verify the result, and return material decisions to engineering. |
 
-These roles have disjoint ownership. `engineer` owns the plan and does not edit
-product code. `implement` owns the code and does not silently revise material
-plan decisions. Either role can be invoked directly when the user is already
-at that point in the workflow.
+Either role can also be invoked directly. Planning and coding have separate
+owners; verification is part of implementation.
 
-There is deliberately no separate QA role and no fixed workflow state machine.
-Verification is an implementation responsibility, while material discoveries
-return to the engineer as decision deltas.
+## Helpers
 
-## Common helper pool
+`engineer` and `implement` select helpers as needed:
 
 | Skill | Responsibility |
 | --- | --- |
-| `branch-from-main` | Choose and create a concise PR branch from `main` with a matching conventional commit message. |
-| `switch-local-branch` | Switch an existing checkout to another branch while preserving dirty work in a traceable stash. |
-| `build-frontend` | Supply React and TypeScript rules for ownership, state, effects, caches, routing, composition, and interaction. |
-| `build-backend` | Supply backend rules for service boundaries, persistence, authorization, background work, and external effects. |
-| `build-migrations` | Supply schema-evolution, migration-review, rollout, compatibility, and forward-recovery rules. |
-| `name-software-concepts` | Choose or review names whose semantics, ownership, lifecycle, or discovery behavior carry engineering meaning. |
-| `verify-implementation` | Prove completed work against the plan, domain contracts, and actual failure boundaries. |
-| `write-code-comments` | Write or revise only comments and docstrings that preserve non-obvious reasons, constraints, or invariants. |
-
-Helpers are not additional workflow roles. They provide focused domain rules or
-procedures inside a role's assignment and never orchestrate the overall task.
-`engineer` and `implement` select from the pool as needed while staying within
-their own responsibility. In the normal workflow, verification remains the
-implementer's self-gate rather than an independent approval role.
-
-Both roles use `name-software-concepts` for consequential vocabulary. The
-engineer uses it to make plan terminology and public contracts unambiguous; the
-implementer uses it for plan-compatible names and to identify naming collisions
-that must return to engineering as decision deltas.
-
-## Deterministic linter
-
-[`@isobarbaric/code-contracts`](packages/code-contracts/README.md) runs ESLint
-contracts for `.ts` and `.tsx` files and Python AST contracts for `.py` files.
-The `general` profile contains portable rules; `software-factory` includes those
-rules plus contracts specific to `sf-platform`.
-
-From this checkout, install dependencies with the pinned pnpm version in
-`package.json`, then check the target worktree:
-
-```sh
-pnpm install --frozen-lockfile
-pnpm contracts:check \
-  --repo /absolute/path/to/sf-platform-worktree \
-  --changed-since origin/main \
-  --profile software-factory \
-  --format json
-```
-
-The CLI requires Node.js 20 or newer and `python3` for Python sources. Replace
-the target path and comparison ref with the actual worktree and PR base; use
-`--profile general` for other repositories. The CLI loads its own rules without
-modifying the target repository. `--changed-since` checks complete files changed
-since the merge base, including staged, unstaged, and untracked changes.
-Alternatively, `--staged` checks exact index blobs and `--all` checks all tracked
-and untracked supported sources. Choose exactly one scope.
-
-The workflow requires this check for changed TypeScript and Python sources:
-`engineer` records its scope in the plan, `implement` runs it,
-`verify-implementation` evaluates the evidence, and `execute` requires that
-evidence before accepting `VERIFIED`. Repository lint, type checks, and tests
-remain additional checks. Missing evidence or unresolved violations cannot
-count as a pass; documentation-only changes record the check as not applicable.
-See the [verification procedure](skills/verify-implementation/references/deterministic-lint.md)
-for exit codes, baseline findings, and required evidence.
-
-## Design constraints
-
-- A blueprint remains the intent contract; engineering decisions do not
-  silently rewrite it.
-- A fresh implementer should be able to execute the engineering plan with
-  repository access and no hidden conversation context.
-- Material product, contract, ownership, data, authorization, scope, or rollout
-  discoveries return to the engineer.
-- Completion requires direct, risk-proportional evidence for every material
-  contract.
-- Skills may load only helpers surfaced in the coding agent's available-skills catalog.
-- Commits, pushes, pull requests, deployments, and messages require separate
-  authorization from blueprint execution.
+| `branch-from-main` | Create a PR branch from `main` with a matching commit message. |
+| `switch-local-branch` | Switch branches while preserving uncommitted work. |
+| `build-frontend` | Apply React and TypeScript architecture and interaction rules. |
+| `build-backend` | Apply rules for APIs, services, persistence, and external effects. |
+| `build-migrations` | Plan and review schema changes, rollout, and recovery. |
+| `name-software-concepts` | Choose clear names for software concepts and contracts. |
+| `verify-implementation` | Verify implementation against its plan and failure boundaries. |
+| `write-code-comments` | Explain non-obvious reasons, constraints, and invariants. |
 
 ## Install
 
-Clone the repository and copy the desired skill directories into your coding
-agent's skills directory. Replace `/path/to/agent/skills/` with the directory
-used by your agent:
+Clone the repository and copy the desired directories from `skills/` into your
+coding agent's skills directory. Each skill is independently installable.
+Replace `/path/to/agent/skills/` with the directory used by your agent:
 
 ```sh
 git clone https://github.com/isobarbaric/software-engineering.git
@@ -120,14 +43,26 @@ cd software-engineering
 rsync -a skills/ /path/to/agent/skills/
 ```
 
-Restart or reload your coding agent if its skill catalog does not refresh
-automatically.
+Reload your agent if its skill catalog does not refresh automatically.
 
-## Repository layout
+## Linter
 
-Each directory under `skills/` is independently installable. A skill keeps its
-entrypoint in `SKILL.md`, focused guidance in `references/`, and UI metadata in
-`agents/openai.yaml`.
+[`@isobarbaric/code-contracts`](packages/code-contracts/README.md) checks
+TypeScript, React, and Python sources. It requires Node.js 20+, the pnpm version
+pinned in `package.json`, and `python3` for Python sources.
 
-`packages/code-contracts/` contains the deterministic linter, its portable and
-Software Factory rules, and their tests.
+From this checkout, install dependencies and check changes in a target repository:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm contracts:check \
+  --repo /path/to/target-repository \
+  --changed-since origin/main \
+  --profile general
+```
+
+Replace the target path and comparison ref with your repository and PR base.
+Use `software-factory` for additional rules specific to `sf-platform`.
+See the [linter documentation](packages/code-contracts/README.md) for rules and
+CLI scopes, and the [verification procedure](skills/verify-implementation/references/deterministic-lint.md)
+for required workflow checks.
