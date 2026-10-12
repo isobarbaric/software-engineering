@@ -1,0 +1,4 @@
+interface:
+  display_name: "Switch Local Branch"
+  short_description: "Safely switch branches and preserve dirty work."
+  default_prompt: "Use $switch-local-branch to move this checkout to another branch without losing local changes."
