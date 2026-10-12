@@ -1,8 +1,8 @@
 # software-engineering
 
-`software-engineering` is Krish's personal Codex skill system for turning a
-high-level blueprint into an implementation-grade plan, executing that plan,
-and verifying the result without collapsing planning and coding into one role.
+`software-engineering` is a skill system for coding agents that turns a
+high-level blueprint into an implementation-grade plan, executes that plan,
+and verifies the result without collapsing planning and coding into one role.
 It also includes `@isobarbaric/code-contracts`, a deterministic linter for
 TypeScript, React, and Python engineering contracts.
 
@@ -104,22 +104,24 @@ for exit codes, baseline findings, and required evidence.
   discoveries return to the engineer.
 - Completion requires direct, risk-proportional evidence for every material
   contract.
-- Skills may load only helpers surfaced in Codex's available-skills catalog.
+- Skills may load only helpers surfaced in the coding agent's available-skills catalog.
 - Commits, pushes, pull requests, deployments, and messages require separate
   authorization from blueprint execution.
 
 ## Install
 
-Clone the repository and copy the desired skill directories into the Codex
-skills directory:
+Clone the repository and copy the desired skill directories into your coding
+agent's skills directory. Replace `/path/to/agent/skills/` with the directory
+used by your agent:
 
 ```sh
 git clone https://github.com/isobarbaric/software-engineering.git
 cd software-engineering
-rsync -a skills/ /Users/krish/.codex/skills/
+rsync -a skills/ /path/to/agent/skills/
 ```
 
-Restart or reload Codex if its skill catalog does not refresh automatically.
+Restart or reload your coding agent if its skill catalog does not refresh
+automatically.
 
 ## Repository layout
 
