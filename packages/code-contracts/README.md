@@ -191,10 +191,18 @@ tree-utility test is an owner-boundary test and is listed explicitly.
 
 | Rule | Deterministic contract |
 | --- | --- |
+| `no-underscore-pydantic-model-names` | Pydantic model class names must not begin with an underscore, including internal models and model subclasses. |
 | `no-tuple-service-results` | Public service methods do not return positional tuple products; named multi-value result envelopes are Pydantic models. |
 | `no-generic-domain-exceptions` | Services and repositories raise domain-specific failures instead of `ValueError`, `RuntimeError`, or `Exception`. |
 | `repositories-do-not-control-transactions` | Repositories may flush work but may not begin, commit, or roll back SQLAlchemy transactions. |
 | `sqlalchemy-query-columns-use-model-attributes` | SQLAlchemy column-selection APIs receive symbolic model attributes rather than string column names. |
+
+`no-underscore-pydantic-model-names` recognizes Pydantic imports and aliases,
+`BaseModel`, `RootModel`, v1 and generic model bases, and subclasses and base
+aliases resolved within the same file. It checks nested declarations and has
+no filename or internal-model exemptions. Unrelated private classes remain
+valid. Cross-file inheritance, dynamic model factories, and runtime rebinding
+require review; this source-level rule does not resolve them.
 
 `no-tuple-service-results` applies to public methods on classes whose names end
 in `Service`, including classes that inherit a locally declared service class.

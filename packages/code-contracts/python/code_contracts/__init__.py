@@ -9,6 +9,7 @@ from .rules.no_tuple_service_results import (
     NoTupleServiceResultsOptions,
     check_no_tuple_service_results,
 )
+from .rules.no_underscore_pydantic_model_names import check_no_underscore_pydantic_model_names
 from .rules.repositories_do_not_control_transactions import (
     RepositoriesDoNotControlTransactionsOptions,
     check_repositories_do_not_control_transactions,
@@ -31,6 +32,7 @@ __all__ = [
     "SqlalchemyQueryColumnsUseModelAttributesOptions",
     "check_no_generic_domain_exceptions",
     "check_no_tuple_service_results",
+    "check_no_underscore_pydantic_model_names",
     "check_repositories_do_not_control_transactions",
     "check_scoped_responses_include_scope_ids",
     "check_sqlalchemy_query_columns_use_model_attributes",
