@@ -3,6 +3,8 @@
 `software-engineering` is Krish's personal Codex skill system for turning a
 high-level blueprint into an implementation-grade plan, executing that plan,
 and verifying the result without collapsing planning and coding into one role.
+It also includes `@isobarbaric/code-contracts`, a deterministic linter for
+TypeScript, React, and Python engineering contracts.
 
 ## Orchestration entrypoint
 
@@ -55,6 +57,42 @@ engineer uses it to make plan terminology and public contracts unambiguous; the
 implementer uses it for plan-compatible names and to identify naming collisions
 that must return to engineering as decision deltas.
 
+## Deterministic linter
+
+[`@isobarbaric/code-contracts`](packages/code-contracts/README.md) runs ESLint
+contracts for `.ts` and `.tsx` files and Python AST contracts for `.py` files.
+The `general` profile contains portable rules; `software-factory` includes those
+rules plus contracts specific to `sf-platform`.
+
+From this checkout, install dependencies with the pinned pnpm version in
+`package.json`, then check the target worktree:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm contracts:check \
+  --repo /absolute/path/to/sf-platform-worktree \
+  --changed-since origin/main \
+  --profile software-factory \
+  --format json
+```
+
+The CLI requires Node.js 20 or newer and `python3` for Python sources. Replace
+the target path and comparison ref with the actual worktree and PR base; use
+`--profile general` for other repositories. The CLI loads its own rules without
+modifying the target repository. `--changed-since` checks complete files changed
+since the merge base, including staged, unstaged, and untracked changes.
+Alternatively, `--staged` checks exact index blobs and `--all` checks all tracked
+and untracked supported sources. Choose exactly one scope.
+
+The workflow requires this check for changed TypeScript and Python sources:
+`engineer` records its scope in the plan, `implement` runs it,
+`verify-implementation` evaluates the evidence, and `execute` requires that
+evidence before accepting `VERIFIED`. Repository lint, type checks, and tests
+remain additional checks. Missing evidence or unresolved violations cannot
+count as a pass; documentation-only changes record the check as not applicable.
+See the [verification procedure](skills/verify-implementation/references/deterministic-lint.md)
+for exit codes, baseline findings, and required evidence.
+
 ## Design constraints
 
 - A blueprint remains the intent contract; engineering decisions do not
@@ -88,7 +126,5 @@ Each directory under `skills/` is independently installable. A skill keeps its
 entrypoint in `SKILL.md`, focused guidance in `references/`, and UI metadata in
 `agents/openai.yaml`.
 
-`packages/code-contracts/` contains deterministic code contracts. Its
-`general` preset is reusable across React/TypeScript repositories; its
-`software-factory` preset layers repository-specific contracts on top without
-leaking those assumptions into the portable rules.
+`packages/code-contracts/` contains the deterministic linter, its portable and
+Software Factory rules, and their tests.

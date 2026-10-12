@@ -65,6 +65,18 @@ Reject or repair, when authorized, implementation that contains:
 Do not record a taste objection as a failure. Trace the concrete mechanism and
 consequence or dismiss it.
 
+## Required deterministic linter
+
+For changed `.ts`, `.tsx`, or `.py` files, read and follow
+[deterministic-lint.md](references/deterministic-lint.md). Run the
+`@isobarbaric/code-contracts` CLI from `software-engineering` against the actual
+target checkout and complete change scope. This is a required check in addition
+to repository lint, type checks, and tests. Record its command, tool revision,
+profile, base/scope, checked files, diagnostics, and exit status in the evidence
+matrix. Unresolved violations are `NOT VERIFIED`; unavailable tooling is
+`VERIFIED WITH LIMITATIONS` only when the remaining contract is verified. When
+no supported source files changed, record the check as not applicable and why.
+
 ## Execute risk-proportional checks
 
 Run the narrowest deterministic checks first, then broaden only when the risk

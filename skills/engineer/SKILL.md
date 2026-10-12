@@ -46,6 +46,16 @@ optional invalid states, an unexplained abstraction, a compatibility path, or
 behavior outside the stated outcome. Agreement is a conclusion, not the
 default.
 
+## Deterministic lint contract
+
+For work that changes TypeScript or Python, use the deterministic-lint procedure
+in the catalog-visible `$verify-implementation` skill. Put the
+`@isobarbaric/code-contracts` checkout, target checkout, profile, comparison base,
+exact command, and relevant baseline findings in the plan's verification
+contract. Resolve the base from the actual task or PR; do not assume `origin/main`
+for stacked or release work. Keep pre-existing findings distinct from new ones
+without silently exempting either from the completion gate.
+
 ## Make the decisions
 
 Decide internal technical questions when repository evidence and established

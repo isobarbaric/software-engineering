@@ -107,6 +107,12 @@ implementation matches that contract, and the implementer's
 `VERIFIED WITH LIMITATIONS`, present the missing evidence and residual risk for
 the user's decision; do not silently promote it to completion.
 
+For TypeScript or Python changes, require the implementer's
+`@isobarbaric/code-contracts` deterministic-linter evidence before accepting
+`VERIFIED`. Missing evidence or unresolved violations cannot count as a passed
+check. The role skills own the procedure; do not select or run helpers on their
+behalf.
+
 Return one consolidated handoff: blueprint outcome, material engineering
 decisions, implementation summary, verification evidence, unresolved limits,
 and any separately authorized delivery actions.

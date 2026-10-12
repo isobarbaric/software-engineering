@@ -54,6 +54,13 @@ Complete the plan in ordered, verifiable units. Run the focused check attached
 to a step before moving past the failure boundary it covers. Preserve existing
 user changes and the repository's delivery constraints.
 
+For changed TypeScript or Python, run `@isobarbaric/code-contracts` from the
+`software-engineering` checkout using the deterministic lint procedure in
+`$verify-implementation`. Check the implementation as it develops and rerun after the
+final relevant edit. Repository lint scripts alone do not replace this check.
+Return failures that require material scope or contract changes to the engineer;
+do not weaken rules or suppress findings just to finish.
+
 ## When the plan and reality diverge
 
 Resolve mechanical details from source evidence and repository convention.
