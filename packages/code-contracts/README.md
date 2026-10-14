@@ -58,7 +58,7 @@ PYTHONPATH=packages/code-contracts/python \
 | `dedicated-props-interface` | A component with props uses a same-file `interface ComponentNameProps`; aliases, inline objects, borrowed props, and inferred utility types do not satisfy the contract. |
 | `closed-domain-values-use-enum` | Client-owned closed string vocabularies use enums, including scalar unions, discriminated unions, `as const` sets, and multi-value branches. |
 | `explicit-react-hook-generics` | Generic React APIs provide an explicit type argument; coverage includes every current generic built-in hook plus `createContext`. |
-| `prefer-explicit-control-flow` | Branching is expressed with `if`/`else`, and strict equality chains over one stable subject use `switch`. |
+| `prefer-explicit-control-flow` | Simple derived values and conditional JSX are allowed; nested ternaries and procedural branches use explicit control flow. Strict equality chains over one stable subject use `switch`. |
 | `explicit-handler-signatures` | Public `onX` callbacks show the complete function signature; explicitly typed `handleX` implementations do not borrow or derive it. |
 | `no-inline-behavior-handlers` | JSX `onX` props receive a function reference or a zero-parameter `() => setX(...)` state update. |
 | `no-mirrored-derived-state` | A React effect does not copy a structurally pure expression of its dependencies into state. |
@@ -100,11 +100,22 @@ It covers `createContext`, `use`, `useActionState`, `useCallback`, `useContext`,
 with the same names and React APIs that do not accept type arguments are not
 reported.
 
-`prefer-explicit-control-flow` rejects conditional expressions, logical
-assignment, and short-circuit expressions used directly as statements or JSX
-branches. Boolean logic in conditions and ordinary data expressions remains
-valid. An `if`/`else if` chain with two or more strict-equality comparisons on
-the same variable-like identifier or static member must use `switch`;
+`prefer-explicit-control-flow` allows simple ternaries for derived values,
+grouped objects, callback selection, and JSX rendering. Boolean expressions,
+short-circuit JSX, and nullish fallbacks are also valid. Prefer a direct `const`
+expression to a mutable temporary assigned in both arms of an `if`/`else`.
+
+The rule rejects ternaries nested directly in another ternary's condition or
+arms, including through logical operators and TypeScript wrappers. Object
+values, JSX children and props, and function bodies are separate decisions;
+their own nested ternaries are still checked. Use named values or explicit
+branches for multi-state logic rather than a ternary chain. Expression size
+and visual complexity remain review concerns, not a line-count heuristic.
+
+Conditional and short-circuit expression statements, and logical assignments,
+still require explicit control flow. An `if`/`else if` chain with two or more
+strict-equality comparisons on the same variable-like identifier or static
+member must use `switch`;
 enum/constant-shaped operands are treated as values rather than subjects.
 Compound predicates, ranges, calls, dynamic properties, and mixed subjects are
 not inferred. Guard clauses remain valid, and there are no filename exemptions.

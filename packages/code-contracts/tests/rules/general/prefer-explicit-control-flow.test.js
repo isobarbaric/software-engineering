@@ -132,34 +132,81 @@ const validCases = [
     name: "accepts a logical expression passed as an argument",
     code: `render(ready && enabled);`,
   },
+  {
+    name: "accepts a conditional expression in an initializer",
+    code: `const label = ready ? "ready" : "waiting";`,
+  },
+  {
+    name: "accepts a conditional return expression",
+    code: `function label() { return ready ? "ready" : "waiting"; }`,
+  },
+  {
+    name: "accepts a conditional expression in JSX",
+    code: `const view = <section>{ready ? <Ready /> : <Waiting />}</section>;`,
+  },
+  {
+    name: "accepts and-based conditional JSX",
+    code: `const view = <section>{ready && <Ready />}</section>;`,
+  },
+  {
+    name: "accepts or-based fallback JSX",
+    code: `const view = <section>{content || <Fallback />}</section>;`,
+  },
+  {
+    name: "accepts nullish fallback JSX",
+    code: `const view = <section>{content ?? <Fallback />}</section>;`,
+  },
+  {
+    name: "accepts simple conditional expressions in test files",
+    code: `const result = pass ? expected : actual;`,
+    filename: "Example.test.tsx",
+  },
+  {
+    name: "accepts boolean props and conditional callbacks",
+    code: `const view = <Card disabled={disabled || !canComment} onDelete={canDelete ? handleDelete : undefined} />;`,
+  },
+  {
+    name: "accepts grouped copy and nullish fallbacks",
+    code: `const copy = root ? { label: "Delete Thread", description: "Deletes replies too" } : { label: "Delete Reply", description: "Deletes one reply" }; const author = name ?? "Unknown";`,
+  },
+  {
+    name: "accepts independent decisions inside object values",
+    code: `const props = enabled ? { label: compact ? "Go" : "Continue" } : {};`,
+  },
+  {
+    name: "accepts independent decisions inside JSX children and props",
+    code: `const view = ready ? <Card title={active ? "Active" : "Idle"}>{canComment && <Composer />}{empty ? <Empty /> : <List />}</Card> : <Loading />;`,
+  },
+  {
+    name: "accepts independent decisions inside callback bodies",
+    code: `const items = ready ? entries.map(entry => entry.active ? entry.name : null) : [];`,
+  },
+  {
+    name: "accepts conditional values through TypeScript wrappers",
+    code: `const label = (ready ? "ready" : "waiting") satisfies string; const content = <div>{(ready && <Ready />) as React.ReactNode}</div>;`,
+  },
+  {
+    name: "accepts logical data expressions containing a simple conditional",
+    code: `const enabled = allowed && (admin ? canAdmin : canEdit);`,
+  },
+  {
+    name: "accepts a derived value in a non-JSX module",
+    filename: "Example.ts",
+    code: `const label = ready ? "Ready" : "Waiting";`,
+  },
 ];
 
 for (const fixture of validCases) {
   test(fixture.name, () => {
-    assert.deepEqual(messages(fixture.code), []);
+    assert.deepEqual(messages(fixture.code, fixture.filename), []);
   });
 }
 
 const invalidCases = [
   {
-    name: "rejects a conditional expression in an initializer",
-    code: `const label = ready ? "ready" : "waiting";`,
-    messageIds: ["conditional"],
-  },
-  {
-    name: "rejects a conditional return expression",
-    code: `function label() { return ready ? "ready" : "waiting"; }`,
-    messageIds: ["conditional"],
-  },
-  {
-    name: "rejects a conditional expression in JSX",
-    code: `const view = <section>{ready ? <Ready /> : <Waiting />}</section>;`,
-    messageIds: ["conditional"],
-  },
-  {
-    name: "reports every nested conditional expression",
+    name: "reports the nested conditional in an alternate",
     code: `const value = first ? one : second ? two : three;`,
-    messageIds: ["conditional", "conditional"],
+    messageIds: ["conditional"],
   },
   {
     name: "rejects an and expression statement",
@@ -184,21 +231,6 @@ const invalidCases = [
   {
     name: "rejects a short-circuit statement through TypeScript wrappers",
     code: `(ready && run()) as unknown;`,
-    messageIds: ["shortCircuit"],
-  },
-  {
-    name: "rejects and-based conditional JSX",
-    code: `const view = <section>{ready && <Ready />}</section>;`,
-    messageIds: ["shortCircuit"],
-  },
-  {
-    name: "rejects or-based fallback JSX",
-    code: `const view = <section>{content || <Fallback />}</section>;`,
-    messageIds: ["shortCircuit"],
-  },
-  {
-    name: "rejects nullish fallback JSX",
-    code: `const view = <section>{content ?? <Fallback />}</section>;`,
     messageIds: ["shortCircuit"],
   },
   {
@@ -282,12 +314,6 @@ const invalidCases = [
     messageIds: ["sameSubject"],
   },
   {
-    name: "enforces conditional expressions in test files",
-    code: `const result = pass ? expected : actual;`,
-    filename: "Example.test.tsx",
-    messageIds: ["conditional"],
-  },
-  {
     name: "enforces matching chains in story files",
     code: `
       if (variant === Variant.Primary) { renderPrimary(); }
@@ -301,6 +327,63 @@ const invalidCases = [
     code: `ready && renderReady();`,
     filename: "Example.generated.tsx",
     messageIds: ["shortCircuit"],
+  },
+  {
+    name: "rejects a conditional nested in a consequent",
+    code: `const value = first ? second ? one : two : three;`,
+    messageIds: ["conditional"],
+  },
+  {
+    name: "rejects a conditional nested in a condition",
+    code: `const value = (first ? second : third) ? one : two;`,
+    messageIds: ["conditional"],
+  },
+  {
+    name: "reports each additional decision in a ternary chain once",
+    code: `const value = first ? one : second ? two : third ? three : four;`,
+    messageIds: ["conditional", "conditional"],
+  },
+  {
+    name: "rejects nested ternaries through logical operators and casts",
+    code: `const value = first ? one : allowed && ((second ? two : three) as string);`,
+    messageIds: ["conditional"],
+  },
+  {
+    name: "rejects nesting through satisfies and non-null assertions",
+    code: `const value = first ? ((second ? two : three) satisfies string)! : four;`,
+    messageIds: ["conditional"],
+  },
+  {
+    name: "rejects nesting through angle-bracket type assertions",
+    filename: "Example.ts",
+    code: `const value = first ? <string>(second ? two : three) : four;`,
+    messageIds: ["conditional"],
+  },
+  {
+    name: "rejects a ternary chain in a JSX child",
+    code: `const view = <section>{loading ? <Loading /> : error ? <Error /> : <Content />}</section>;`,
+    messageIds: ["conditional"],
+  },
+  {
+    name: "rejects nested ternaries inside a separately scoped object value",
+    code: `const props = ready ? { label: first ? one : second ? two : three } : {};`,
+    messageIds: ["conditional"],
+  },
+  {
+    name: "rejects a conditional expression statement",
+    code: `ready ? save() : cancel();`,
+    messageIds: ["conditionalStatement"],
+  },
+  {
+    name: "rejects a conditional statement through TypeScript wrappers",
+    code: `(ready ? save() : cancel()) as unknown;`,
+    messageIds: ["conditionalStatement"],
+  },
+  {
+    name: "enforces nested decisions in test files",
+    code: `const result = pass ? expected : retry ? previous : actual;`,
+    filename: "Example.test.tsx",
+    messageIds: ["conditional"],
   },
 ];
 
@@ -316,7 +399,7 @@ for (const fixture of invalidCases) {
 }
 
 test("reports exact control-flow messages, order, and locations", () => {
-  const result = messages(`const label = ready ? "ready" : "waiting";
+  const result = messages(`const label = ready ? "ready" : retry ? "retry" : "waiting";
 ready && render();
 if (status === Status.Pending) { showPending(); }
 else if (status === Status.Complete) { showComplete(); }`);
@@ -334,11 +417,11 @@ else if (status === Status.Complete) { showComplete(); }`);
       {
         messageId: "conditional",
         message:
-          "Replace this conditional expression with explicit if/else control flow.",
+          "Replace this nested conditional expression with named values or explicit control flow.",
         line: 1,
-        column: 15,
+        column: 33,
         endLine: 1,
-        endColumn: 42,
+        endColumn: 60,
       },
       {
         messageId: "shortCircuit",

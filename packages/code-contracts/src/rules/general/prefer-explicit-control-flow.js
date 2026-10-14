@@ -7,6 +7,7 @@ import {
 const TRANSPARENT_EXPRESSIONS = new Set([
   "ChainExpression",
   "TSAsExpression",
+  "TSTypeAssertion",
   "TSSatisfiesExpression",
   "TSNonNullExpression",
   "TypeCastExpression",
@@ -133,17 +134,42 @@ function outerLogicalExpression(node) {
   return current;
 }
 
+function isNestedConditional(node) {
+  let current = node;
+  while (
+    (TRANSPARENT_EXPRESSIONS.has(current.parent?.type) &&
+      current.parent.expression === current) ||
+    current.parent?.type === "LogicalExpression"
+  ) {
+    current = current.parent;
+  }
+  return current.parent?.type === "ConditionalExpression";
+}
+
+function isExpressionStatement(node) {
+  let current = node;
+  while (
+    TRANSPARENT_EXPRESSIONS.has(current.parent?.type) &&
+    current.parent.expression === current
+  ) {
+    current = current.parent;
+  }
+  return current.parent?.type === "ExpressionStatement";
+}
+
 export default createRule(
   {
     ...architectureRuleMeta,
     docs: {
       ...architectureRuleMeta.docs,
       description:
-        "Prefer explicit control flow and switches over expression-level branching.",
+        "Allow simple derived expressions; keep nested decisions and procedural branches explicit.",
     },
     messages: {
       conditional:
-        "Replace this conditional expression with explicit if/else control flow.",
+        "Replace this nested conditional expression with named values or explicit control flow.",
+      conditionalStatement:
+        "Replace this conditional expression statement with explicit if/else control flow.",
       shortCircuit:
         "Replace this short-circuit branch with explicit if/else control flow.",
       sameSubject:
@@ -152,18 +178,17 @@ export default createRule(
   },
   (context) => ({
     ConditionalExpression(node) {
-      context.report({ node, messageId: "conditional" });
+      if (isNestedConditional(node)) {
+        context.report({ node, messageId: "conditional" });
+      } else if (isExpressionStatement(node)) {
+        context.report({ node, messageId: "conditionalStatement" });
+      }
     },
 
     LogicalExpression(node) {
       if (node.parent?.type === "LogicalExpression") return;
       const expression = outerLogicalExpression(node);
-      if (
-        expression.parent?.type !== "ExpressionStatement" &&
-        expression.parent?.type !== "JSXExpressionContainer"
-      ) {
-        return;
-      }
+      if (expression.parent?.type !== "ExpressionStatement") return;
       context.report({ node, messageId: "shortCircuit" });
     },
 
