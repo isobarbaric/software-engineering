@@ -3,6 +3,7 @@ import dedicatedPropsInterface from "./rules/general/dedicated-props-interface.j
 import closedDomainValuesUseEnum from "./rules/general/closed-domain-values-use-enum.js";
 import explicitReactHookGenerics from "./rules/general/explicit-react-hook-generics.js";
 import preferExplicitControlFlow from "./rules/general/prefer-explicit-control-flow.js";
+import noBlankLinesBetweenImports from "./rules/general/no-blank-lines-between-imports.js";
 import explicitHandlerSignatures from "./rules/general/explicit-handler-signatures.js";
 import noInlineBehaviorHandlers from "./rules/general/no-inline-behavior-handlers.js";
 import noMirroredDerivedState from "./rules/general/no-mirrored-derived-state.js";
@@ -18,6 +19,7 @@ const generalRules = {
   "closed-domain-values-use-enum": closedDomainValuesUseEnum,
   "explicit-react-hook-generics": explicitReactHookGenerics,
   "prefer-explicit-control-flow": preferExplicitControlFlow,
+  "no-blank-lines-between-imports": noBlankLinesBetweenImports,
   "explicit-handler-signatures": explicitHandlerSignatures,
   "no-inline-behavior-handlers": noInlineBehaviorHandlers,
   "no-mirrored-derived-state": noMirroredDerivedState,

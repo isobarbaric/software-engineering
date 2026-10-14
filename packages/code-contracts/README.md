@@ -59,6 +59,7 @@ PYTHONPATH=packages/code-contracts/python \
 | `closed-domain-values-use-enum` | Client-owned closed string vocabularies use enums, including scalar unions, discriminated unions, `as const` sets, and multi-value branches. |
 | `explicit-react-hook-generics` | Generic React APIs provide an explicit type argument; coverage includes every current generic built-in hook plus `createContext`. |
 | `prefer-explicit-control-flow` | Simple derived values and conditional JSX are allowed; nested ternaries and procedural branches use explicit control flow. Strict equality chains over one stable subject use `switch`. |
+| `no-blank-lines-between-imports` | Consecutive top-level imports stay together when only whitespace separates them; comment-separated groups are preserved. Autofixes only spacing. |
 | `explicit-handler-signatures` | Public `onX` callbacks show the complete function signature; explicitly typed `handleX` implementations do not borrow or derive it. |
 | `no-inline-behavior-handlers` | JSX `onX` props receive a function reference or a zero-parameter `() => setX(...)` state update. |
 | `no-mirrored-derived-state` | A React effect does not copy a structurally pure expression of its dependencies into state. |
@@ -119,6 +120,13 @@ member must use `switch`;
 enum/constant-shaped operands are treated as values rather than subjects.
 Compound predicates, ranges, calls, dynamic properties, and mixed subjects are
 not inferred. Guard clauses remain valid, and there are no filename exemptions.
+
+`no-blank-lines-between-imports` checks consecutive top-level ES imports and
+TypeScript import-equals declarations. It reports whitespace-only gaps with
+blank lines and provides an ESLint whitespace fix. Import text, order,
+side-effect imports, comments, and spacing before application code stay intact.
+Comment-separated groups are allowed. The rule does not check dynamic imports,
+CommonJS variable declarations, or spacing inside a multiline import.
 
 `explicit-handler-signatures` requires an `onX` property to contain a complete
 function type, including explicit parameter and return types. Callback aliases,

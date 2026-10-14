@@ -54,6 +54,20 @@ test("general preset exposes only repository-agnostic rules", () => {
   );
 });
 
+test("both presets enforce import spacing by default", () => {
+  for (const preset of [plugin.configs.general, plugin.configs["software-factory"]]) {
+    const result = lintWithPreset(
+      preset,
+      'import "first";\n\nimport "second";',
+      "frontend/src/Example.ts",
+    );
+    assert.deepEqual(
+      result.map(({ ruleId, messageId }) => ({ ruleId, messageId })),
+      [{ ruleId: "contracts/no-blank-lines-between-imports", messageId: "blankLine" }],
+    );
+  }
+});
+
 test("software-factory preset layers repository rules after general rules", () => {
   const [generalLayer, repositoryLayer] = plugin.configs["software-factory"];
   assert.equal(generalLayer, plugin.configs.general[0]);
@@ -138,7 +152,11 @@ test("software-factory preset applies repository rules only under frontend src",
 test("every exported rule has complete ESLint metadata", () => {
   for (const [name, rule] of Object.entries(plugin.rules)) {
     assert.equal(typeof rule.create, "function", `${name} is missing create()`);
-    assert.equal(rule.meta.type, "problem", `${name} has the wrong rule type`);
+    assert.equal(
+      rule.meta.type,
+      name === "no-blank-lines-between-imports" ? "layout" : "problem",
+      `${name} has the wrong rule type`,
+    );
     assert.ok(rule.meta.docs?.description, `${name} is missing a description`);
     assert.equal(
       rule.meta.docs.recommended,
