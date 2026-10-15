@@ -1,0 +1,4 @@
+interface:
+  display_name: "Improve Engineering Skills"
+  short_description: "Turn conversation evidence into focused skill PRs"
+  default_prompt: "Use $improve-engineering-skills to review this conversation, improve the relevant software-engineering skills, and open a focused pull request when changes are warranted."

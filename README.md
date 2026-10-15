@@ -31,6 +31,21 @@ owners; verification is part of implementation.
 | `verify-implementation` | Verify implementation against its plan and failure boundaries. |
 | `write-code-comments` | Explain non-obvious reasons, constraints, and invariants. |
 
+## Improve skills from a conversation
+
+At the end of an engineering conversation, invoke:
+
+```text
+$improve-engineering-skills
+```
+
+The skill reviews the conversation for reusable lessons, checks the relevant
+source skills, and opens a focused pull request when changes are warranted.
+It distinguishes missing guidance from execution mistakes and stale installed
+copies. It may conclude that no skill changes are needed. Add `review-only` to
+request findings without edits or a PR. Proposed changes do not update installed
+skills until you install them.
+
 ## Install
 
 Clone the repository and copy the desired directories from `skills/` into your
