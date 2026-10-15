@@ -1,9 +1,12 @@
 ---
 name: improve-engineering-skills
-description: Review an engineering conversation for reusable lessons, improve the relevant skills in isobarbaric/software-engineering, and open a focused pull request. Use when the user requests an end-of-conversation skill improvement pass; ordinary coding completion or a status summary is not a trigger.
+description: Metaskill that improves other engineering skills using conversation evidence and opens a focused pull request in isobarbaric/software-engineering. Use when the user requests an end-of-conversation skill improvement pass; ordinary coding completion or a status summary is not a trigger.
 ---
 
-# Improve Engineering Skills
+# Improve Engineering Skills — Metaskill
+
+This metaskill maintains and improves the base engineering skills themselves.
+Its output is a reviewed change to agent guidance.
 
 Turn demonstrated lessons from the current conversation into small, durable
 improvements to the engineering skills. Challenge the user's proposed lesson
