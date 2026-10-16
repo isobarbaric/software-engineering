@@ -134,13 +134,14 @@ function propsTypeName(component, aliases) {
   );
 }
 
-function interfaceName(statement) {
+function propsDeclarationName(statement) {
   const declaration =
     statement.type === "ExportNamedDeclaration" ||
     statement.type === "ExportDefaultDeclaration"
       ? statement.declaration
       : statement;
-  return declaration?.type === "TSInterfaceDeclaration"
+  return declaration?.type === "TSInterfaceDeclaration" ||
+    declaration?.type === "TSTypeAliasDeclaration"
     ? declaration.id.name
     : null;
 }
@@ -276,11 +277,11 @@ export default createRule(
     ...architectureRuleMeta,
     docs: {
       ...architectureRuleMeta.docs,
-      description: "Require a same-file ComponentNameProps interface for component props.",
+      description: "Require a same-file ComponentNameProps interface or type alias for component props.",
     },
     messages: {
       missing:
-        "{{name}} must use a dedicated same-file interface named {{expected}} for its props.",
+        "{{name}} must use a dedicated same-file interface or type alias named {{expected}} for its props.",
     },
   },
   (context) => {
@@ -289,9 +290,9 @@ export default createRule(
     return {
       Program(node) {
         const aliases = componentWrapperAliases(node);
-        const interfaces = new Set(
+        const propsDeclarations = new Set(
           node.body
-            .map(interfaceName)
+            .map(propsDeclarationName)
             .filter(Boolean),
         );
 
@@ -319,7 +320,7 @@ export default createRule(
             const expected = `${component.name}Props`;
             if (
               propsTypeName(component, aliases) !== expected ||
-              !interfaces.has(expected)
+              !propsDeclarations.has(expected)
             ) {
               context.report({
                 node: component.node,

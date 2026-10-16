@@ -55,7 +55,7 @@ PYTHONPATH=packages/code-contracts/python \
 | Rule | Deterministic contract |
 | --- | --- |
 | `one-react-component-per-file` | A production module declares at most one React component, including nested and locally attached compound components. |
-| `dedicated-props-interface` | A component with props uses a same-file `interface ComponentNameProps`; aliases, inline objects, borrowed props, and inferred utility types do not satisfy the contract. |
+| `dedicated-props-interface` | A component with props uses a same-file `interface ComponentNameProps` or `type ComponentNameProps`; inline annotations and directly imported or differently named props contracts do not satisfy the contract. |
 | `closed-domain-values-use-enum` | Client-owned closed string vocabularies use enums, including scalar unions, discriminated unions, `as const` sets, and multi-value branches. |
 | `explicit-react-hook-generics` | Generic React APIs provide an explicit type argument; coverage includes every current generic built-in hook plus `createContext`. |
 | `prefer-explicit-control-flow` | Simple derived values and conditional JSX are allowed; nested ternaries and procedural branches use explicit control flow. Strict equality chains over one stable subject use `switch`. |
@@ -76,9 +76,14 @@ a static property. Attaching an imported component to a namespace is assembly,
 not a second declaration, and remains valid. Test, spec, and story files are
 exempt.
 
-`dedicated-props-interface` requires the interface to be declared in the same
-module and named after the component. The interface may be exported, generic,
-or extend native/platform contracts. `React.FC<ComponentProps>`,
+`dedicated-props-interface` requires an interface or type alias to be declared
+in the same module, named after the component, and used as its props contract.
+Either declaration may be exported or generic. Interfaces may extend
+native/platform contracts; type aliases may express unions, intersections,
+utility-derived props, or a reference to a shared contract. A discriminated
+union can therefore combine common props with alternative states without
+forcing those states into a nested property. The existing rule ID is retained
+for configuration compatibility. `React.FC<ComponentProps>`,
 `forwardRef<Element, ComponentProps>`, and class components are supported.
 Components without props and test, spec, or story files are exempt.
 

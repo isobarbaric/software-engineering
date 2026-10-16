@@ -16,6 +16,90 @@ function messages(code, filename = "Example.tsx") {
 
 const validCases = [
   {
+    name: "accepts a discriminated union intersected with common props",
+    code: `
+      interface BaseProps { title: string }
+      type PreviewProps = BaseProps & (
+        | { isPreviewUrlUnavailable: false; src: string }
+        | { isPreviewUrlUnavailable: true; src?: never }
+      );
+      export function Preview(props: PreviewProps) {
+        return <div>{props.isPreviewUrlUnavailable ? props.title : props.src}</div>;
+      }
+    `,
+  },
+  {
+    name: "accepts a discriminated union of interface alternatives",
+    code: `
+      interface Available { unavailable: false; src: string }
+      interface Unavailable { unavailable: true; src?: never }
+      type PreviewProps = Available | Unavailable;
+      export function Preview(props: PreviewProps) { return <div>{props.src}</div>; }
+    `,
+  },
+  {
+    name: "accepts an exported generic alias declared after the component",
+    code: `
+      export function List<T>({ items }: ListProps<T>) { return <div>{items.length}</div>; }
+      export type ListProps<T> = { items: T[] };
+    `,
+  },
+  {
+    name: "accepts a dedicated alias of an imported shared contract",
+    code: `
+      import type { SharedProps } from "./types";
+      type CardProps = SharedProps;
+      export function Card(props: CardProps) { return <div>{props.label}</div>; }
+    `,
+  },
+  {
+    name: "accepts a dedicated alias of utility-derived props",
+    code: `
+      type CardProps = React.ComponentProps<"div">;
+      export function Card(props: CardProps) { return <div {...props} />; }
+    `,
+  },
+  {
+    name: "accepts React.FC with a matching alias",
+    code: `
+      type CardProps = { label: string };
+      export const Card: React.FC<CardProps> = ({ label }) => <div>{label}</div>;
+    `,
+  },
+  {
+    name: "accepts memo around forwardRef with a matching alias",
+    code: `
+      import { memo as stableMemo, forwardRef as withRef } from "react";
+      type InputProps = { value: string };
+      export const Input = stableMemo(withRef<HTMLInputElement, InputProps>(
+        ({ value }, ref) => <input ref={ref} value={value} />,
+      ));
+    `,
+  },
+  {
+    name: "accepts a class component with a matching alias",
+    code: `
+      type CardProps = { label: string };
+      export class Card extends React.Component<CardProps> {
+        render() { return <div>{this.props.label}</div>; }
+      }
+    `,
+  },
+  {
+    name: "accepts memo using a type alias",
+    code: `
+      type CardProps = { label: string };
+      export const Card = memo(({ label }: CardProps) => <div>{label}</div>);
+    `,
+  },
+  {
+    name: "accepts a same-file named type alias",
+    code: `
+      type CardProps = { label: string };
+      export const Card = ({ label }: CardProps) => <div>{label}</div>;
+    `,
+  },
+  {
     name: "accepts a same-file named interface",
     code: `
       interface AccountCardProps { name: string }
@@ -266,15 +350,16 @@ test("exempts test, spec, story, and stories files", () => {
 
 const invalidCases = [
   {
-    name: "rejects inline object props",
-    code: `export const Card = ({ label }: { label: string }) => <div>{label}</div>;`,
+    name: "rejects a borrowed alias even when a dedicated alias exists",
+    code: `
+      type SharedProps = { label: string };
+      type CardProps = SharedProps;
+      export function Card(props: SharedProps) { return <div>{props.label}</div>; }
+    `,
   },
   {
-    name: "rejects a type alias even when it has the expected name",
-    code: `
-      type CardProps = { label: string };
-      export const Card = ({ label }: CardProps) => <div>{label}</div>;
-    `,
+    name: "rejects inline object props",
+    code: `export const Card = ({ label }: { label: string }) => <div>{label}</div>;`,
   },
   {
     name: "rejects a borrowed props interface",
@@ -296,7 +381,7 @@ const invalidCases = [
     code: `export const Card = (props) => <div>{props.label}</div>;`,
   },
   {
-    name: "rejects an imported matching interface",
+    name: "rejects an imported matching props contract",
     code: `
       import type { CardProps } from "./types";
       export const Card = ({ label }: CardProps) => <div>{label}</div>;
@@ -338,13 +423,6 @@ const invalidCases = [
     code: `
       interface CardProps { label: string }
       export const Card: React.FunctionComponent = ({ label }) => <div>{label}</div>;
-    `,
-  },
-  {
-    name: "rejects memo using a type alias",
-    code: `
-      type CardProps = { label: string };
-      export const Card = memo(({ label }: CardProps) => <div>{label}</div>);
     `,
   },
   {
@@ -433,14 +511,14 @@ test("reports multiple components in source order with their exact required name
       {
         messageId: "missing",
         message:
-          "First must use a dedicated same-file interface named FirstProps for its props.",
+          "First must use a dedicated same-file interface or type alias named FirstProps for its props.",
         line: 1,
         column: 7,
       },
       {
         messageId: "missing",
         message:
-          "Second must use a dedicated same-file interface named SecondProps for its props.",
+          "Second must use a dedicated same-file interface or type alias named SecondProps for its props.",
         line: 2,
         column: 3,
       },
@@ -448,13 +526,13 @@ test("reports multiple components in source order with their exact required name
   );
 });
 
-test("reports the component and required interface names", () => {
+test("reports the component and required props declaration names", () => {
   const [result] = messages(
     `export const AccountCard = ({ name }: { name: string }) => <div>{name}</div>;`,
   );
   assert.equal(
     result.message,
-    "AccountCard must use a dedicated same-file interface named AccountCardProps for its props.",
+    "AccountCard must use a dedicated same-file interface or type alias named AccountCardProps for its props.",
   );
 });
 
