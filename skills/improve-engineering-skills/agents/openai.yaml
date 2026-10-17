@@ -1,0 +1,4 @@
+interface:
+  display_name: "Improve Engineering Skills (Metaskill)"
+  short_description: "Metaskill for evidence-based engineering skill PRs"
+  default_prompt: "Use the $improve-engineering-skills metaskill to review this conversation, improve the relevant software-engineering skills, and open a focused pull request when changes are warranted."
