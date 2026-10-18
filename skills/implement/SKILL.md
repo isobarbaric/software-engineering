@@ -34,6 +34,11 @@ Stop if there is no concrete plan. Do not quietly perform the engineer role and
 then implement an unreviewed design. Do not edit the plan while acting as the
 implementer; the engineer owns revisions.
 
+When creating an implementation branch, default to `codex/<short-description>`,
+using a concise, lowercase, hyphen-separated description of the change. Honor an
+explicit user-specified branch name or prefix. Keep an existing task or PR branch
+name when continuing work; this convention does not require renaming it.
+
 ## Execute
 
 Implement the smallest coherent change that satisfies the plan:
