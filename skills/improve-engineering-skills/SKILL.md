@@ -88,9 +88,9 @@ remains ambiguous, ask only about that decision and continue independent work.
 
 Resolve the actual PR base from the fetched source remote. For a new PR,
 use its default branch unless the user specifies another base. Prefer a clean,
-isolated worktree with a `codex/` branch; preserve the product checkout and any
-unrelated dirty work. Do not switch, stash, or reset the user's checkout merely
-to perform this maintenance.
+isolated worktree; preserve the product checkout and any unrelated dirty work.
+Do not switch, stash, or reset the user's checkout merely to perform this
+maintenance.
 
 Inspect an existing PR before reusing its branch. Reuse only a PR for this same
 maintenance task or one the user identified; do not append to an unrelated skill
