@@ -59,6 +59,13 @@ Complete the plan in ordered, verifiable units. Run the focused check attached
 to a step before moving past the failure boundary it covers. Preserve existing
 user changes and the repository's delivery constraints.
 
+Keep an architectural decisions log as you implement. Read
+[architectural-decisions-log.md](references/architectural-decisions-log.md) for
+the format and scope. Record architectural choices you fill in when the approved
+plan did not specify them—where state lives, which module owns what, new
+dependencies or abstractions, boundary changes, or choosing between competing
+designs. This is distinct from decision deltas; it does not block progress.
+
 For changed TypeScript or Python, run `@isobarbaric/code-contracts` from the
 `software-engineering` checkout using the deterministic lint procedure in
 `$verify-implementation`. Check the implementation as it develops and rerun after the
@@ -86,8 +93,8 @@ engineer as decision deltas.
 Do not declare completion unless verification returns `VERIFIED`. If it returns
 `VERIFIED WITH LIMITATIONS`, surface the missing evidence and residual risk to
 the user rather than silently treating it as complete. Return an evidence-based
-handoff with the plan steps completed, skills used, changed contracts, checks,
-and unresolved limitations.
+handoff with the plan steps completed, skills used, changed contracts, the
+architectural decisions log, checks, and unresolved limitations.
 
 There is no separate QA role in this workflow. Verification remains part of
 implementation, but broad exploratory QA is not implied unless the plan
