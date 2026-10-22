@@ -48,7 +48,7 @@ Return:
 - completed plan items;
 - catalog skills and focused references used;
 - changed files and contracts;
-- consequential local decisions;
+- consequential local decisions (the architectural decisions log);
 - `$verify-implementation` status and evidence;
 - unresolved deltas, blockers, or limitations.
 
