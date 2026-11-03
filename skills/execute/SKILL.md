@@ -34,6 +34,15 @@ decisions to make it appear implementation-ready.
 
 Read [handoff-contracts.md](references/handoff-contracts.md) before delegating.
 
+## Software Factory work
+
+When the blueprint targets the Software Factory repository (`sf-platform`), read
+`agents.override.md` at the repository root before framing the work. The file
+is untracked, so a linked worktree may lack it; read the primary checkout's
+copy instead (`git worktree list` names the primary checkout first). Treat it
+as the repository instructions for this workflow, and pass its path to every
+engineer and implementer handoff so both roles apply it directly.
+
 ## Frame the work
 
 Restate the smallest honest problem:
