@@ -30,6 +30,7 @@ owners; verification is part of implementation.
 | `name-software-concepts` | Choose clear names for software concepts and contracts. |
 | `verify-implementation` | Verify implementation against its plan and failure boundaries. |
 | `write-code-comments` | Explain non-obvious reasons, constraints, and invariants. |
+| `recover-side-chat-transcripts` | Export missing Codex side-chat transcripts and recover their plans from Capture. |
 
 ## Metaskill: improve engineering skills
 
