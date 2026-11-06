@@ -23,6 +23,10 @@ commenting, verification, delivery, or other helper skills on their behalf.
 `$engineer` and `$implement` choose helpers from the available-skills catalog
 according to their own responsibility and the changed concerns.
 
+When a new PR branch starts from `main`, the implementer uses
+`$branch-from-main`. Its bounded branch-creation workflow does not replace the
+implementer's handling of existing task or PR branches.
+
 Helpers supply domain rules or bounded procedures. They do not own the overall
 workflow, call `$execute`, or blur the engineer/implementer boundary. A helper
 may be shared by both roles when it carries domain truth both need.

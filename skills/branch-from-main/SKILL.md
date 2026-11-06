@@ -1,11 +1,11 @@
 ---
 name: branch-from-main
-description: Choose and create a concise pull-request branch from `main` and a matching commit message using `{feat|fix|chore|refactor}`. Use as a bounded helper when starting a small, single-commit PR while currently on `main`, or when the user asks for a branch name, commit message, or branch creation from `main`; it is not a workflow role.
+description: Choose and create a concise pull-request branch from `main` and a matching commit message using `{feat|fix|chore|refactor}`. Use when creating a PR branch from `main`, or when the user asks for a branch name, commit message, or branch creation from `main`; it is not a workflow role.
 ---
 
 # Branch From Main
 
-Use this for small PRs that should start from `main`. It names the branch and creates it only after confirming that the current checkout is `main`.
+Use this for PR branches that should start from `main`, regardless of PR size or commit count. It names the branch and creates it only after confirming that the current checkout is `main`.
 
 ## Workflow
 

@@ -34,10 +34,12 @@ Stop if there is no concrete plan. Do not quietly perform the engineer role and
 then implement an unreviewed design. Do not edit the plan while acting as the
 implementer; the engineer owns revisions.
 
-When creating an implementation branch, default to `codex/<short-description>`,
-using a concise, lowercase, hyphen-separated description of the change. Honor an
-explicit user-specified branch name or prefix. Keep an existing task or PR branch
-name when continuing work; this convention does not require renaming it.
+When creating an implementation branch, honor an explicit user-specified branch
+name or prefix. When creating a PR branch from `main`, use `$branch-from-main`
+regardless of PR size or commit count. If the helper is unavailable, report the
+missing skill rather than silently substituting another convention. Keep an
+existing task or PR branch name when continuing work; this convention does not
+require renaming it.
 
 ## Execute
 
