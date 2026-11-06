@@ -23,9 +23,9 @@ commenting, verification, delivery, or other helper skills on their behalf.
 `$engineer` and `$implement` choose helpers from the available-skills catalog
 according to their own responsibility and the changed concerns.
 
-For a small, single-commit PR starting from `main`, the implementer can select
-`$branch-from-main` when it is available. Its bounded branch-creation workflow
-does not replace the implementer's handling of existing task or PR branches.
+When a new PR branch starts from `main`, the implementer uses
+`$branch-from-main`. Its bounded branch-creation workflow does not replace the
+implementer's handling of existing task or PR branches.
 
 Helpers supply domain rules or bounded procedures. They do not own the overall
 workflow, call `$execute`, or blur the engineer/implementer boundary. A helper

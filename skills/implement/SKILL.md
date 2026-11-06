@@ -35,11 +35,11 @@ then implement an unreviewed design. Do not edit the plan while acting as the
 implementer; the engineer owns revisions.
 
 When creating an implementation branch, honor an explicit user-specified branch
-name or prefix. For a small, single-commit PR starting from `main`, use
-`$branch-from-main` when available. Otherwise default to
-`codex/<short-description>`, using a concise, lowercase, hyphen-separated
-description. Keep an existing task or PR branch name when continuing work;
-this convention does not require renaming it.
+name or prefix. When creating a PR branch from `main`, use `$branch-from-main`
+regardless of PR size or commit count. If the helper is unavailable, report the
+missing skill rather than silently substituting another convention. Keep an
+existing task or PR branch name when continuing work; this convention does not
+require renaming it.
 
 ## Execute
 
